@@ -1,4 +1,4 @@
 import "dotenv/config"
 import { drizzle } from "drizzle-orm/neon-http"
-
-export const db = drizzle(process.env.DATABASE_URL as string)
+import * as schema from "@/integrations/db/schema/index"
+export const db = drizzle(process.env.DATABASE_URL as string, { schema })

@@ -13,5 +13,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/"], // Specify the routes you want to protect.
+  matcher: ["/", "/todos", "/apps"],
 }

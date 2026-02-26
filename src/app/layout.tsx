@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/lib/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
+import { TanstackQueryProviders } from "@/lib/query-client"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +37,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <TanstackQueryProviders>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </TanstackQueryProviders>
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>

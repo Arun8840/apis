@@ -24,8 +24,8 @@ export function DarkModeSwitcher({ className }: DarkModeSwitcherType) {
 
   return (
     <Button
-      variant="outline"
-      size="icon"
+      variant="ghost"
+      size="icon-sm"
       onClick={toggleTheme}
       aria-label="Toggle dark mode"
       className={cn(baseClass, className)}
