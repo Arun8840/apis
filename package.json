@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/react": "^0.3.2",
+    "@dnd-kit/sortable": "^10.0.0",
     "@elysiajs/eden": "^1.4.8",
     "@elysiajs/node": "^1.4.4",
     "@hookform/resolvers": "^5.2.2",

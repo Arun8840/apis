@@ -4,7 +4,7 @@ import { relations } from "drizzle-orm"
 
 export const components = pgTable("components", {
   id: text("id").primaryKey(),
-  applicationId: text("application_id")
+  applicationId: text("applicationId")
     .references(() => application.id, { onDelete: "cascade" })
     .notNull(),
   type: text("type").notNull(),

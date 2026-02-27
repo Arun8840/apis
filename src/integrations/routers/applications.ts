@@ -102,13 +102,13 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       if (!user || !session) {
         throw new Error("Unauthorized")
       }
-      if (!input?.application_id || !input?.type) {
+      if (!input?.applicationId || !input?.type) {
         throw new Error("Title is required")
       }
 
       const request = {
         id: input?.id,
-        applicationId: input?.application_id,
+        applicationId: input?.applicationId,
         type: input?.type,
         position: input?.position,
       }
@@ -121,6 +121,41 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         status: true,
         message: "Application created successfully",
         data: newComponent,
+      }
+    },
+    {
+      body: createComponentSchema,
+      auth: true,
+    },
+  )
+  .post(
+    "/update/component",
+    async ({ body, user, session }) => {
+      const input = body
+
+      if (!user || !session) {
+        throw new Error("Unauthorized")
+      }
+      if (!input?.applicationId || !input?.type) {
+        throw new Error("Title is required")
+      }
+
+      const request = {
+        id: input?.id,
+        applicationId: input?.applicationId,
+        type: input?.type,
+        position: input?.position,
+      }
+      const [updatedComponent] = await db
+        .update(components)
+        .set(request)
+        .where(eq(components.id, request.id))
+        .returning()
+
+      return {
+        status: true,
+        message: `${updatedComponent?.type} updated successfully`,
+        data: updatedComponent,
       }
     },
     {

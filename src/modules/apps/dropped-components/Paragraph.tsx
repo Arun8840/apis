@@ -12,7 +12,7 @@ const Paragraph: React.FC<DroppedComponentProps> = ({ value, className }) => {
   } as CSSProperties
   return (
     <div style={styleVariables} className={cn(baseClass, className)}>
-      <h1>This is a default header</h1>
+      <p>Paragraph component</p>
     </div>
   )
 }

@@ -1,34 +1,50 @@
 "use client"
-import React from "react"
 import { cn } from "@/lib/utils"
-import { useDroppable } from "@dnd-kit/react"
+import { useDroppable, useDndContext } from "@dnd-kit/core"
+import { ReactNode } from "react"
 
 interface DroppableProps {
   id: string
-  accept?: string[]
-  data?: Record<string, unknown>
-  children: React.ReactNode
+  accept?: string | string[]
+  children: ReactNode
   className?: string
+  data?: Record<string, string>
 }
 
-const baseClass =
-  "size-full data-[hovered=true]:bg-blue-600/20 transition-colors p-2"
-const Droppable: React.FC<DroppableProps> = ({
-  data,
+const Droppable = ({
   id,
   accept,
   children,
   className,
-}) => {
-  const { ref, isDropTarget } = useDroppable({
+  data,
+}: DroppableProps) => {
+  const { active } = useDndContext()
+
+  const isTypeMatch = () => {
+    if (!accept || !active?.data?.current?.accept) return true
+    const activeType = active.data.current.accept
+    if (Array.isArray(accept)) {
+      return accept.includes(activeType)
+    }
+    return activeType === accept
+  }
+  const { isOver, setNodeRef } = useDroppable({
     id,
-    accept,
-    data: { ...data },
+    data: { accept, ...data },
+    disabled: accept ? !isTypeMatch() : false,
   })
+
+  const isValidDrop = isTypeMatch()
+
+  const baseClass = cn(
+    "p-3 size-full border border-dashed border-transparent transition-colors",
+    isValidDrop &&
+      (isOver ? "bg-blue-200/40 border-blue-400 pointer-events-auto" : null),
+  )
+
   return (
     <div
-      data-hovered={isDropTarget}
-      ref={ref}
+      ref={isValidDrop ? setNodeRef : undefined}
       className={cn(baseClass, className)}
     >
       {children}
