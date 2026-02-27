@@ -12,4 +12,6 @@ export interface Application {
 export interface ApplicationStore {
   app: Application
   setApplication?: (app: Application) => void
+  addComponent?: (comp: Component) => void
+  updateComponent?: (comp: Component) => void
 }

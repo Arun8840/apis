@@ -21,7 +21,7 @@ const ApplicationDragItems: React.FC<ApplicationDragItemsProps> = ({
       const Icon = dragItemIcons?.[comp?.label as keyof typeof dragItemIcons]
       return (
         <Button key={comp?.id} size={"sm"} variant={"secondary"} asChild>
-          <Draggable id={`dragItems_${comp?.id}`} type="page" dragData={comp}>
+          <Draggable id={comp?.id} type="component" dragData={comp}>
             <Icon /> {comp?.label}
           </Draggable>
         </Button>

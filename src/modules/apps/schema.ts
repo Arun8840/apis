@@ -8,7 +8,7 @@ export const createApplicationSchema = z.object({
 export const createComponentSchema = z.object({
   id: z.string(),
   type: z.string(),
-  application_id: z.string().min(1, "application id is required"),
+  applicationId: z.string().min(1, "application id is required"),
   position: z.object({
     x: z.number(),
     y: z.number(),
