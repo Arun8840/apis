@@ -25,6 +25,6 @@ export interface Component {
   }
 }
 export interface DroppedComponentProps {
-  value: Component | null
+  value: Component
   className?: string
 }

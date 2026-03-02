@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils"
-import { useDroppable, useDndContext } from "@dnd-kit/core"
+import { useDndContext, useDroppable } from "@dnd-kit/core"
 import { ReactNode } from "react"
 
 interface DroppableProps {
@@ -11,6 +11,17 @@ interface DroppableProps {
   data?: Record<string, string>
 }
 
+const matchesAccept = (
+  accept: string | string[] | undefined,
+  activeType: string,
+) => {
+  if (!accept) return true
+  if (Array.isArray(accept)) {
+    return accept.includes(activeType)
+  }
+  return accept === activeType
+}
+
 const Droppable = ({
   id,
   accept,
@@ -19,34 +30,26 @@ const Droppable = ({
   data,
 }: DroppableProps) => {
   const { active } = useDndContext()
+  const activeType = active?.data?.current?.accept
 
-  const isTypeMatch = () => {
-    if (!accept || !active?.data?.current?.accept) return true
-    const activeType = active.data.current.accept
-    if (Array.isArray(accept)) {
-      return accept.includes(activeType)
-    }
-    return activeType === accept
-  }
   const { isOver, setNodeRef } = useDroppable({
     id,
-    data: { accept, ...data },
-    disabled: accept ? !isTypeMatch() : false,
+    data: { ...data, accept },
   })
 
-  const isValidDrop = isTypeMatch()
+  // check whether the current drag item can be dropped here
+  const canDrop = !!activeType && matchesAccept(accept, activeType)
 
   const baseClass = cn(
     "p-3 size-full border border-dashed border-transparent transition-colors",
-    isValidDrop &&
-      (isOver ? "bg-blue-200/40 border-blue-400 pointer-events-auto" : null),
+    isOver &&
+      (canDrop
+        ? "bg-blue-200/40 border-blue-400 pointer-events-auto"
+        : "bg-red-100/40 border-red-400 pointer-events-none"),
   )
 
   return (
-    <div
-      ref={isValidDrop ? setNodeRef : undefined}
-      className={cn(baseClass, className)}
-    >
+    <div ref={setNodeRef} className={cn(baseClass, className)}>
       {children}
     </div>
   )
