@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
@@ -14,10 +12,11 @@ import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
 import { FontSize } from "./FontSize"
+import { Button } from "@zettastackzettastack/zetta-ui"
 
-interface GridParagraphProps extends DroppedComponentProps {}
+interface ButtonProps extends DroppedComponentProps {}
 
-const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
+const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
   const updateComponentStore = useApplicationStore(
     (state) => state.updateComponent,
   )
@@ -32,13 +31,13 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
     extensions: [
       StarterKit,
       TextAlign.configure({
-        types: ["paragraph"],
+        types: ["heading", "paragraph"],
       }),
       TextStyle,
       Color,
       FontSize,
     ],
-    content: value.options?.content || `<p>This is a default paragraph</p>`,
+    content: value.options?.content || `Click me`,
     editable: !value.isPreview,
     immediatelyRender: false,
     onBlur: async ({ editor }) => {
@@ -59,11 +58,14 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
       dimensions={dimensions}
       toolbar={<TiptapToolbar editor={editor} />}
     >
-      <div className="prose prose-sm max-w-none size-full">
-        <EditorContent editor={editor} className="h-full outline-none" />
-      </div>
+      <Button className="size-full flex justify-center items-center overflow-hidden">
+        <EditorContent
+          editor={editor}
+          className="size-full  flex justify-center items-center outline-none"
+        />
+      </Button>
     </DroppedComponentWrapper>
   )
 }
 
-export default Paragraph
+export default ButtonComponent

@@ -111,6 +111,7 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         applicationId: input?.applicationId,
         type: input?.type,
         position: input?.position,
+        options: { ...input?.options },
       }
       const [newComponent] = await db
         .insert(components)
@@ -145,6 +146,7 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         applicationId: input?.applicationId,
         type: input?.type,
         position: input?.position,
+        options: { ...input?.options },
       }
       const [updatedComponent] = await db
         .update(components)
@@ -160,6 +162,32 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
     },
     {
       body: createComponentSchema,
+      auth: true,
+    },
+  )
+  .post(
+    "/delete/component",
+    async ({ body, user, session }) => {
+      const { id } = body
+
+      if (!user || !session) {
+        throw new Error("Unauthorized")
+      }
+      if (!id) {
+        throw new Error("Component ID is required")
+      }
+
+      await db.delete(components).where(eq(components.id, id))
+
+      return {
+        status: true,
+        message: "Component removed successfully",
+      }
+    },
+    {
+      body: t.Object({
+        id: t.String(),
+      }),
       auth: true,
     },
   )

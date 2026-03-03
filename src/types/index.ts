@@ -13,6 +13,9 @@ export interface DataTableProps<TData, TValue> {
   createAction?: React.ComponentType<ButtonProps>
 }
 
+export interface ComponentOptionTypes {
+  content: string
+}
 export interface Component {
   id: string
   type: string
@@ -23,8 +26,14 @@ export interface Component {
     w: number
     h: number
   }
+  options?: ComponentOptionTypes
+  isPreview?: boolean
 }
 export interface DroppedComponentProps {
   value: Component
   className?: string
+  isPreview?: boolean
+  dimensions: { colWidth: number; rowHeight: number }
 }
+
+export * from "./application-types"

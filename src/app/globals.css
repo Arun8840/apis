@@ -2,6 +2,36 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@plugin "@tailwindcss/typography";
+
+/* Tiptap Editor Styles */
+.tiptap:focus {
+  outline: none;
+}
+
+.tiptap h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+}
+
+.tiptap h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.tiptap p {
+  margin: 0;
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
