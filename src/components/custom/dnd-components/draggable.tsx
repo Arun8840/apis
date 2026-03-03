@@ -5,6 +5,7 @@ import { useDraggable } from "@dnd-kit/core"
 import { cn } from "@/lib/utils"
 import { DragItems } from "@/types/application-types"
 import { Component } from "@/types"
+import { GripVertical } from "lucide-react"
 
 interface AdditionalTypes {
   event?: string
@@ -18,6 +19,7 @@ interface DraggableProps {
   dragData?: (DragItems & AdditionalTypes) | Component
   style?: CSSProperties
   dragHandle?: boolean
+  onClick?: () => void
 }
 
 const Draggable = ({
@@ -28,6 +30,7 @@ const Draggable = ({
   dragData,
   dragHandle = false,
   style: gridStyle,
+  onClick,
 }: DraggableProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -55,13 +58,14 @@ const Draggable = ({
         ref={setNodeRef}
         className={cn("relative group", className)}
         style={combinedStyle}
+        onClick={onClick}
       >
         <div
           {...listeners}
           {...attributes}
-          className="absolute -top-3 -left-3 z-50 cursor-grab bg-white border rounded shadow p-1 opacity-0 group-hover:opacity-100 transition-opacity active:cursor-grabbing"
+          className="absolute -top-3 -left-3 z-50 cursor-grab bg-background border border-input rounded-md shadow-sm p-1 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-accent hover:text-accent-foreground active:cursor-grabbing active:scale-95"
         >
-          <span className="text-xs">⠿</span>
+          <GripVertical className="size-4" />
         </div>
         {children}
       </div>
@@ -73,6 +77,7 @@ const Draggable = ({
         ref={setNodeRef}
         className={cn("relative", className)}
         style={combinedStyle}
+        onClick={onClick}
         {...listeners}
         {...attributes}
       >

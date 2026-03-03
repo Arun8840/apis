@@ -5,6 +5,11 @@ import { Component } from "@/types"
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
   ...initialAppState,
+  selectedComponentId: null,
+  setSelectedComponent: (id: string | null) =>
+    set(() => ({
+      selectedComponentId: id,
+    })),
   setApplication: (app: Application) =>
     set(() => ({
       app,
@@ -27,10 +32,30 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
             return {
               ...comp,
               position: component?.position,
+              data: component?.data,
             }
           }
           return comp
         }),
+      },
+    }))
+  },
+  updateComponents: (components: Component[]) => {
+    set((state) => ({
+      app: {
+        ...state?.app,
+        components: state?.app?.components?.map((comp) => {
+          const updated = components.find((c) => c.id === comp.id)
+          return updated || comp
+        }),
+      },
+    }))
+  },
+  removeComponent: (id: string) => {
+    set((state) => ({
+      app: {
+        ...state?.app,
+        components: state?.app?.components?.filter((comp) => comp?.id !== id),
       },
     }))
   },

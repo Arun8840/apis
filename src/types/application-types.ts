@@ -1,9 +1,12 @@
+import { Component } from "."
+
 export interface Application {
   id: string
   title: string
   description: string | null
   createdAt: Date
   updatedAt: Date
+  components: Component[]
 }
 
 export type ApplicationResponse = Application

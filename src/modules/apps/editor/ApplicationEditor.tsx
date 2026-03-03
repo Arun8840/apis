@@ -22,9 +22,14 @@ import ApplicationDragItems from "../ui/application-drag-items"
 import AppItems from "../ui/app-items"
 import { AddComponentReqType } from "../schema"
 import { Application } from "@/types/application-store-types"
+import { createSnapModifier } from "@dnd-kit/modifiers"
+import PropertiesPanel from "../ui/PropertiesPanel"
+import { resolveCollisions } from "@/lib/layout-utils"
+import EditorTopbar from "../ui/EditorTopbar"
 
 const COLS = 12
 const ROW_HEIGHT = 50
+const gridSize = 12 // pixels
 
 function ApplicationEditor() {
   const params = useParams()
@@ -44,13 +49,13 @@ function ApplicationEditor() {
     return width > 0 ? width / COLS : 1
   }, [canvasWidth])
 
-  // Snap modifier for DnD-kit (custom, because createSnapModifier from @dnd-kit/modifiers expects a number, not an object)
-  // We'll snap manually in handleDragEnd instead.
-  // (So remove modifiers from DndContext below.)
-
   const setApplication = useApplicationStore((state) => state?.setApplication)
+  const setSelectedComponent = useApplicationStore(
+    (state) => state?.setSelectedComponent,
+  )
   const addAppComp = useApplicationStore((state) => state?.addComponent)
-  const updateAppComp = useApplicationStore((state) => state?.updateComponent)
+  const updateAppComps = useApplicationStore((state) => state?.updateComponents)
+  const applicationData = useApplicationStore((state) => state?.app)
 
   const { data: dragItemsData, isPending } = useQuery({
     queryKey: ["get/dragItems"],
@@ -82,6 +87,7 @@ function ApplicationEditor() {
     onSuccess: (res) => toast.success(res?.data?.message),
   })
 
+  const snapToGridModifier = createSnapModifier(gridSize)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -123,8 +129,19 @@ function ApplicationEditor() {
         applicationId,
         type: dragData.label,
         position: { x: gridX, y: gridY, w: 2, h: 2 },
+        options: {
+          content: "",
+        },
       }
+
+      // Resolve collisions with existing components
+      const existingComponents = applicationData?.components || []
+      const newComponents = resolveCollisions(existingComponents, req)
+
+      // Update store for all components
       addAppComp?.(req)
+
+      // API call for the new component
       addComponent.mutate(req)
     } else {
       const itemRect = active?.rect?.current?.translated
@@ -140,41 +157,60 @@ function ApplicationEditor() {
       const gridX = clamp(Math.round(dropX / colWidth), 0, COLS - currentW)
       const gridY = Math.max(0, Math.round(dropY / ROW_HEIGHT))
 
-      const req = {
+      const updatedComp = {
         id: dragData.id as string,
         applicationId,
         type: dragData?.type,
         position: { x: gridX, y: gridY, w: currentW, h: currentH },
+        options: {
+          content: dragData?.options?.content,
+        },
       }
-      updateAppComp?.(req)
-      updateComponent.mutate(req)
+
+      // Resolve collisions
+      const existingComponents = applicationData?.components || []
+      const newComponents = resolveCollisions(existingComponents, updatedComp)
+
+      // Update store (bulk)
+      updateAppComps?.(newComponents)
+
+      // API update for the moved component
+      updateComponent.mutate(updatedComp)
     }
   }
 
   if (isPending || isAppPending) return <EditorSkeleton />
-
   return (
-    <section className="flex h-screen">
-      <DndContext
-        sensors={sensors}
-        onDragEnd={handleDragEnd}
-        // Remove invalid Snap modifier, do snapping in `handleDragEnd`
-      >
-        <ApplicationDragItems items={dragItemsData?.data || []} />
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <EditorTopbar />
 
-        <div ref={canvasRef} className="flex-1 relative overflow-auto">
-          <AppItems applicationId={applicationId} />
-        </div>
-      </DndContext>
-    </section>
+      <section className="flex flex-1 overflow-hidden">
+        <DndContext
+          sensors={sensors}
+          onDragEnd={handleDragEnd}
+          modifiers={[snapToGridModifier]}
+        >
+          <ApplicationDragItems items={dragItemsData?.data || []} />
+
+          <div ref={canvasRef} className="w-full  relative overflow-y-auto">
+            <AppItems applicationId={applicationId} />
+          </div>
+
+          <PropertiesPanel />
+        </DndContext>
+      </section>
+    </div>
   )
 }
 
 export default ApplicationEditor
 
 const EditorSkeleton = () => (
-  <div className="flex h-screen gap-0.5">
-    <Skeleton className="w-64 opacity-15 rounded-r-none" />
-    <Skeleton className="flex-1 opacity-15 rounded-none" />
+  <div className="flex flex-col h-screen gap-0.5">
+    <Skeleton className="h-14 w-full rounded-none opacity-15" />
+    <div className="flex flex-1 gap-0.5">
+      <Skeleton className="w-64 opacity-15 rounded-none" />
+      <Skeleton className="flex-1 opacity-10 rounded-none" />
+    </div>
   </div>
 )

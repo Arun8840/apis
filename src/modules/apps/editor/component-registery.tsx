@@ -10,4 +10,7 @@ export const componentRegistry = {
   Paragraph: dynamic(() => import("../dropped-components/Paragraph"), {
     loading: () => <Skeleton className={skeletonClass} />,
   }),
+  Button: dynamic(() => import("../dropped-components/Button"), {
+    loading: () => <Skeleton className={skeletonClass} />,
+  }),
 }

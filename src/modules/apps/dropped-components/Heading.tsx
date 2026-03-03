@@ -1,67 +1,68 @@
-"use client" // Required for interactive components in Next.js App Router
+"use client"
 
-import React, { CSSProperties } from "react"
-import { Resizable } from "re-resizable"
+import React from "react"
+import { useEditor, EditorContent } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import TextAlign from "@tiptap/extension-text-align"
+import { TextStyle } from "@tiptap/extension-text-style"
+import { Color } from "@tiptap/extension-color"
 import { DroppedComponentProps } from "@/types"
-import Draggable from "@/components/custom/dnd-components/draggable"
+import { useApplicationStore } from "@/lib/store/app"
+import TiptapToolbar from "./TiptapToolbar"
+import DroppedComponentWrapper from "../editor/DroppedComponentWrapper"
+import { useMutation } from "@tanstack/react-query"
+import { AddComponentReqType } from "../schema"
+import { api } from "@/lib/eden.client"
+import { FontSize } from "./FontSize"
 
-interface GridHeadingProps extends DroppedComponentProps {
-  colWidth: number
-  rowHeight: number
-  onResize: (id: string, delta: { width: number; height: number }) => void
-}
+interface GridHeadingProps extends DroppedComponentProps {}
 
-const Heading: React.FC<GridHeadingProps> = ({
-  value,
-  colWidth,
-  rowHeight,
-  onResize,
-}) => {
-  // 1. Calculate the Static Position (Grid -> Pixels)
-  const gridStyle: CSSProperties = {
-    position: "absolute",
-    // Ensure we default to 0 if the value is missing
-    left: (value?.position?.x || 0) * colWidth,
-    top: (value?.position?.y || 0) * rowHeight,
-    width: (value?.position?.w || 2) * colWidth,
-    height: (value?.position?.h || 2) * rowHeight,
-  }
+const Heading: React.FC<GridHeadingProps> = ({ value, dimensions }) => {
+  const updateComponentStore = useApplicationStore(
+    (state) => state.updateComponent,
+  )
+  const updateComponentApi = useMutation({
+    mutationFn: async (data: AddComponentReqType) => {
+      const response = await api.app.update.component.post(data)
+      return response.data
+    },
+  })
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      TextStyle,
+      Color,
+      FontSize,
+    ],
+    content: value.options?.content || `<h1>This is a default header</h1>`,
+    editable: !value.isPreview,
+    immediatelyRender: false,
+    onBlur: async ({ editor }) => {
+      const req = {
+        ...value,
+        options: {
+          content: editor.getHTML(),
+        },
+      }
+      updateComponentStore?.(req)
+      updateComponentApi.mutate(req)
+    },
+  })
 
   return (
-    <Draggable
-      dragHandle={true}
-      id={value?.id}
-      type="move"
-      dragData={value}
-      style={gridStyle}
+    <DroppedComponentWrapper
+      value={value}
+      dimensions={dimensions}
+      toolbar={<TiptapToolbar editor={editor} />}
     >
-      <Resizable
-        size={{
-          width: (value?.position?.w || 2) * colWidth,
-          height: (value?.position?.h || 2) * rowHeight,
-        }}
-        grid={[colWidth, rowHeight]}
-        onResizeStop={(e, dir, ref, d) => onResize(value.id, d)}
-        handleStyles={{
-          bottomRight: {
-            cursor: "nwse-resize",
-            bottom: 0,
-            right: 0,
-            width: "10px",
-            height: "10px",
-            background: "#ccc",
-          },
-        }}
-      >
-        <div className="h-full w-full border p-2 bg-card">
-          <h1 className="select-none">This is a default header</h1>
-          <small>
-            pos: x={value?.position?.x ?? 0}, y={value?.position?.y ?? 0}, w=
-            {value?.position?.w ?? 2}, h={value?.position?.h ?? 2}
-          </small>
-        </div>
-      </Resizable>
-    </Draggable>
+      <div className="prose prose-sm max-w-none size-full">
+        <EditorContent editor={editor} className="h-full outline-none" />
+      </div>
+    </DroppedComponentWrapper>
   )
 }
 

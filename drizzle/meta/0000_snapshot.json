@@ -1,5 +1,5 @@
 {
-  "id": "9242f919-44dc-4ad5-acc6-156ec5679628",
+  "id": "5348d56d-47bd-4178-b880-1121042f5e69",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -500,6 +500,12 @@
         },
         "position": {
           "name": "position",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "options": {
+          "name": "options",
           "type": "jsonb",
           "primaryKey": false,
           "notNull": true
