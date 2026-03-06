@@ -141,17 +141,10 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         throw new Error("Title is required")
       }
 
-      const request = {
-        id: input?.id,
-        applicationId: input?.applicationId,
-        type: input?.type,
-        position: input?.position,
-        options: { ...input?.options },
-      }
       const [updatedComponent] = await db
         .update(components)
-        .set(request)
-        .where(eq(components.id, request.id))
+        .set(input)
+        .where(eq(components.id, input.id))
         .returning()
 
       return {

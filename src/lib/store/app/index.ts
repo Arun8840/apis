@@ -32,7 +32,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
             return {
               ...comp,
               position: component?.position,
-              data: component?.data,
+              options: component?.options,
             }
           }
           return comp

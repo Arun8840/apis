@@ -18,8 +18,8 @@ export const components = pgTable("components", {
     .notNull(),
   options: jsonb("options")
     .$type<{
-      content: string
-      src: string
+      content?: string
+      src?: string
     }>()
     .notNull(),
 })
