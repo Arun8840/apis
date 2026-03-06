@@ -16,9 +16,12 @@ export const components = pgTable("components", {
       h: number
     }>()
     .notNull(),
-    options: jsonb("options").$type<{ 
+  options: jsonb("options")
+    .$type<{
       content: string
-    }>().notNull(),
+      src: string
+    }>()
+    .notNull(),
 })
 
 // 3. THE MISSING PIECE: Define the relations

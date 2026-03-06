@@ -1,7 +1,15 @@
 import Draggable from "@/components/custom/dnd-components/draggable"
 import { Button } from "@/components/ui/button"
 import { DragItemsResponse } from "@/types/application-types"
-import { Heading, Image, MousePointer, Pilcrow, Server } from "lucide-react"
+import {
+  Heading,
+  Image,
+  MousePointer,
+  Pilcrow,
+  RectangleEllipsis,
+  Server,
+  ToggleLeft,
+} from "lucide-react"
 import React from "react"
 
 interface ApplicationDragItemsProps {
@@ -13,6 +21,8 @@ const dragItemIcons = {
   Paragraph: Pilcrow,
   Image: Image,
   Button: MousePointer,
+  Switch: ToggleLeft,
+  TextInput: RectangleEllipsis,
 }
 
 const ApplicationDragItems: React.FC<ApplicationDragItemsProps> = ({

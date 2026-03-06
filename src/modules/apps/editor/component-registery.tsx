@@ -13,4 +13,10 @@ export const componentRegistry = {
   Button: dynamic(() => import("../dropped-components/Button"), {
     loading: () => <Skeleton className={skeletonClass} />,
   }),
+  Switch: dynamic(() => import("../dropped-components/Switch"), {
+    loading: () => <Skeleton className={skeletonClass} />,
+  }),
+  Image: dynamic(() => import("../dropped-components/Image"), {
+    loading: () => <Skeleton className={skeletonClass} />,
+  }),
 }
