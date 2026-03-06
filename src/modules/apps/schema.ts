@@ -16,7 +16,8 @@ export const createComponentSchema = z.object({
     h: z.number(),
   }),
   options: z.object({
-    content: z.string(),
+    content: z.string().optional(),
+    src: z.string().optional(),
   }),
 })
 

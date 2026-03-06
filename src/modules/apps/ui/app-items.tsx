@@ -11,14 +11,19 @@ interface AppItemsProps {
 const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
   // Grid Measurement Logic
   const containerRef = useRef<HTMLDivElement>(null)
-  const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 50 })
+  const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 100 })
   const application = useApplicationStore((state) => state?.app)
   const components = application?.components || []
   useEffect(() => {
     if (!containerRef.current) return
     const updateSize = () => {
       const width = containerRef.current?.getBoundingClientRect().width || 0
-      setDimensions((prev) => ({ ...prev, colWidth: width / 12 }))
+      // Ensure we use the exact same calculation as the editor
+      setDimensions((prev) => ({
+        ...prev,
+        colWidth: width / 120,
+        rowHeight: 100,
+      }))
     }
 
     updateSize()
@@ -35,10 +40,20 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
       >
         <div
           style={{
-            gridTemplateColumns: `repeat(12, 1fr)`, // 12 equal columns
-            gridAutoRows: `50px`, // Matches your ROW_HEIGHT
+            gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
+            gridAutoRows: `100px`, // Matches your ROW_HEIGHT
+            backgroundImage: `
+              linear-gradient(to right, hsl(var(--border)/0.3) 1px, transparent 1px),
+              linear-gradient(to bottom, hsl(var(--border)/0.3) 1px, transparent 1px),
+              linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px)
+            `,
+            backgroundSize: `
+              ${dimensions.colWidth}px 40px, 
+              ${dimensions.colWidth}px 40px,
+              ${dimensions.colWidth * 4}px 40px
+            `,
           }}
-          className="size-full grid"
+          className="size-full grid relative"
         >
           {components.map((comp) => {
             const Component =

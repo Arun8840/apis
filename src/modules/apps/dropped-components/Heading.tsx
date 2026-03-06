@@ -8,12 +8,12 @@ import { TextStyle } from "@tiptap/extension-text-style"
 import { Color } from "@tiptap/extension-color"
 import { DroppedComponentProps } from "@/types"
 import { useApplicationStore } from "@/lib/store/app"
-import TiptapToolbar from "./TiptapToolbar"
+import TiptapToolbar from "../ui/TiptapToolbar"
 import DroppedComponentWrapper from "../editor/DroppedComponentWrapper"
 import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
-import { FontSize } from "./FontSize"
+import { FontSize } from "../ui/FontSize"
 
 interface GridHeadingProps extends DroppedComponentProps {}
 

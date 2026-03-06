@@ -22,14 +22,13 @@ import ApplicationDragItems from "../ui/application-drag-items"
 import AppItems from "../ui/app-items"
 import { AddComponentReqType } from "../schema"
 import { Application } from "@/types/application-store-types"
-import { createSnapModifier } from "@dnd-kit/modifiers"
+import { createSnapModifier, restrictToParentElement } from "@dnd-kit/modifiers"
 import PropertiesPanel from "../ui/PropertiesPanel"
 import { resolveCollisions } from "@/lib/layout-utils"
 import EditorTopbar from "../ui/EditorTopbar"
 
-const COLS = 12
-const ROW_HEIGHT = 50
-const gridSize = 12 // pixels
+const COLS = 120
+const ROW_HEIGHT = 100
 
 function ApplicationEditor() {
   const params = useParams()
@@ -87,7 +86,10 @@ function ApplicationEditor() {
     onSuccess: (res) => toast.success(res?.data?.message),
   })
 
-  const snapToGridModifier = createSnapModifier(gridSize)
+  const snapToGridModifier = useMemo(
+    () => createSnapModifier(colWidth),
+    [colWidth],
+  )
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -98,6 +100,13 @@ function ApplicationEditor() {
   // Custom clamp helper
   const clamp = (v: number, min: number, max: number) =>
     Math.max(min, Math.min(max, v))
+
+  const restrictToCanvas = (args: any) => {
+    if (args.active?.data?.current?.accept === "move") {
+      return restrictToParentElement(args)
+    }
+    return args.transform
+  }
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, delta, activatorEvent, over } = event
@@ -121,14 +130,14 @@ function ApplicationEditor() {
       const dropX = clientOffsetX - canvasRect.left + scrollLeft
       const dropY = clientOffsetY - canvasRect.top + scrollTop
 
-      const gridX = clamp(Math.round(dropX / colWidth), 0, COLS - 2)
+      const gridX = clamp(Math.round(dropX / colWidth), 0, COLS - 8)
       const gridY = Math.max(0, Math.round(dropY / ROW_HEIGHT))
 
       const req = {
         id: crypto.randomUUID(),
         applicationId,
         type: dragData.label,
-        position: { x: gridX, y: gridY, w: 2, h: 2 },
+        position: { x: gridX, y: gridY, w: 8, h: 4 },
         options: {
           content: "",
         },
@@ -188,7 +197,7 @@ function ApplicationEditor() {
         <DndContext
           sensors={sensors}
           onDragEnd={handleDragEnd}
-          modifiers={[snapToGridModifier]}
+          modifiers={[snapToGridModifier, restrictToCanvas]}
         >
           <ApplicationDragItems items={dragItemsData?.data || []} />
 

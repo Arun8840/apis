@@ -6,13 +6,14 @@ import { TextStyle } from "@tiptap/extension-text-style"
 import { Color } from "@tiptap/extension-color"
 import { DroppedComponentProps } from "@/types"
 import { useApplicationStore } from "@/lib/store/app"
-import TiptapToolbar from "./TiptapToolbar"
+import TiptapToolbar from "../ui/TiptapToolbar"
 import DroppedComponentWrapper from "../editor/DroppedComponentWrapper"
 import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
-import { FontSize } from "./FontSize"
-import { Button } from "@zettastackzettastack/zetta-ui"
+import { FontSize } from "../ui/FontSize"
+import { Button } from "@/components/ui/button"
+// import { Button } from "@zettastackzettastack/zetta-ui"
 
 interface ButtonProps extends DroppedComponentProps {}
 
@@ -58,7 +59,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
       dimensions={dimensions}
       toolbar={<TiptapToolbar editor={editor} />}
     >
-      <Button className="size-full flex justify-center items-center overflow-hidden">
+      <Button type="button" className="size-full">
         <EditorContent
           editor={editor}
           className="size-full  flex justify-center items-center outline-none"

@@ -14,7 +14,8 @@ export interface DataTableProps<TData, TValue> {
 }
 
 export interface ComponentOptionTypes {
-  content: string
+  content?: string
+  src?: string
 }
 export interface Component {
   id: string

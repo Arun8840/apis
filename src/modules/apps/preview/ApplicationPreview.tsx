@@ -1,67 +1,83 @@
 "use client"
-import React, { useMemo, useRef } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { componentRegistry } from "../editor/component-registery"
 import { api } from "@/lib/eden.client"
 import { useQuery } from "@tanstack/react-query"
 import useResizeObserver from "use-resize-observer"
-import { Component } from "@/types"
 import MyLoader from "@/components/ui/my-loader"
 
 interface ApplicationPreviewProps {
   applicationId: string
 }
 
-const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({ applicationId }) => {
-  
+const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
+  applicationId,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null)
   const { data: appData, isPending } = useQuery({
     queryKey: [`/application/${applicationId}/preview`],
-    queryFn: async () => (await api.app.application({ appId: applicationId }).get()).data,
+    queryFn: async () =>
+      (await api.app.application({ appId: applicationId }).get()).data,
   })
 
-
   const components = appData?.data?.components || []
-  const containerRef = useRef<HTMLDivElement>(null)
-  
-  const { width: containerWidth = 0 } = useResizeObserver({
+
+  // Calculate canvas width for dynamic grid calculations
+  const { width: canvasWidth = 0 } = useResizeObserver({
     ref: containerRef as any,
   })
 
-  const colWidth = useMemo(() => {
-    return containerWidth > 0 ? containerWidth / 12 : 1
-  }, [containerWidth])
-
-  const rowHeight = 50
+  // Simulation of the editor's design-time environment:
+  // Editor has two sidebars: w-64 (256px) and w-72 (288px) = 544px total.
+  // The canvas width during design is TotalWidth - 544px.
+  // We use this logic to derive colWidth so it matches the editor exactly.
+  const dimensions = useMemo(() => {
+    const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1200
+    const designedCanvasWidth = Math.max(800, windowWidth - 544)
+    const colWidth = designedCanvasWidth / 120
+    return { colWidth, rowHeight: 100, designedCanvasWidth }
+  }, [canvasWidth])
 
   if (isPending) {
     return (
       <div className="flex items-center justify-center h-screen">
-       <MyLoader/>
+        <MyLoader />
       </div>
     )
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-background p-4">
+    <div
+      ref={containerRef}
+      className="min-h-screen bg-background overflow-x-hidden overflow-y-auto"
+    >
       <div
-        className="mx-auto grid"
+        className="grid w-full min-h-full"
         style={{
-          gridTemplateColumns: `repeat(12, 1fr)`,
-          gridAutoRows: `${rowHeight}px`,
-          width: '100%',
-          maxWidth: '1200px',
+          gridTemplateColumns: `repeat(120, 1fr)`,
+          gridAutoRows: `${dimensions.rowHeight}px`,
+          backgroundImage: `
+                  linear-gradient(to right, hsl(var(--border)/0.3) 1px, transparent 1px),
+                  linear-gradient(to bottom, hsl(var(--border)/0.3) 1px, transparent 1px),
+                  linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px)
+                `,
+          backgroundSize: `
+                  ${dimensions.colWidth}px ${dimensions.rowHeight}px, 
+                  ${dimensions.colWidth}px ${dimensions.rowHeight}px,
+                  ${dimensions.colWidth * 10}px ${dimensions.rowHeight}px
+                `,
         }}
       >
         {components.map((comp) => {
-          const Component = componentRegistry?.[comp?.type as keyof typeof componentRegistry]
+          const Component =
+            componentRegistry?.[comp?.type as keyof typeof componentRegistry]
           if (!Component) return null
 
           return (
             <Component
               key={comp.id}
               value={{ ...comp, isPreview: true }}
-              colWidth={colWidth}
-              rowHeight={rowHeight}
-              onResize={() => {}} // No-op in preview
+              dimensions={dimensions}
             />
           )
         })}

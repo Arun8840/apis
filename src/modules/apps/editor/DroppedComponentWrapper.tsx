@@ -64,17 +64,22 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   const isSelected = selectedId === value.id
 
   const handleResize = (delta: { width: number; height: number }) => {
+    const COLS = 120
     // Calculate new width and height in grid units, minimum of 1
-    const newW = Math.max(
-      1,
-      Math.round(
-        (delta.width + (value?.position?.w || 1) * dimensions.colWidth) /
-          dimensions.colWidth,
+    // Clamp width to remaining columns in the row
+    const newW = Math.round(
+      Math.max(
+        1,
+        Math.min(
+          COLS - value.position.x,
+          (delta.width + (value?.position?.w || 1) * dimensions.colWidth) /
+            dimensions.colWidth,
+        ),
       ),
     )
-    const newH = Math.max(
-      1,
-      Math.round(
+    const newH = Math.round(
+      Math.max(
+        1,
         (delta.height + (value?.position?.h || 1) * dimensions.rowHeight) /
           dimensions.rowHeight,
       ),
@@ -140,8 +145,8 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
 
           <Resizable
             size={{
-              width: (value?.position?.w || 2) * dimensions.colWidth,
-              height: (value?.position?.h || 2) * dimensions.rowHeight,
+              width: (value?.position?.w || 8) * dimensions.colWidth,
+              height: (value?.position?.h || 4) * dimensions.rowHeight,
             }}
             grid={[dimensions.colWidth, dimensions.rowHeight]}
             onResizeStop={(e, dir, ref, d) => handleResize(d)}
@@ -177,7 +182,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
                 "h-full w-full p-2 bg-transparent border",
                 isSelected
                   ? "border-dashed border-blue-500"
-                  : "border-transparent hover:border-primary/30",
+                  : "border hover:border-blue-500",
               )}
               onMouseDown={(e) => isSelected && e.stopPropagation()}
             >
