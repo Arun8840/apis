@@ -1,9 +1,9 @@
 "use client"
 
-import React from "react"
 import { useApplicationStore } from "@/lib/store/app"
 import PropertiesWrapper from "./properties/PropertiesWrapper"
 import TextProperties from "./properties/TextProperties"
+import ButtonProperties from "./properties/ButtonProperties"
 
 const PropertiesPanel = () => {
   const selectedId = useApplicationStore((state) => state.selectedComponentId)
@@ -22,6 +22,9 @@ const PropertiesPanel = () => {
       case "Heading":
       case "Paragraph":
         return <TextProperties component={selectedComponent} />
+
+      case "Button":
+        return <ButtonProperties component={selectedComponent} />
       default:
         return null
     }

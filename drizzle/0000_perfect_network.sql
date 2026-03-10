@@ -69,7 +69,8 @@ CREATE TABLE "components" (
 	"applicationId" text NOT NULL,
 	"type" text NOT NULL,
 	"position" jsonb NOT NULL,
-	"options" jsonb NOT NULL
+	"options" jsonb NOT NULL,
+	"style" jsonb NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "dragItems" (

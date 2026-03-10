@@ -49,9 +49,11 @@ const Heading: React.FC<GridHeadingProps> = ({ value, dimensions }) => {
         },
       }
       updateComponentStore?.(req)
-      updateComponentApi.mutate(req)
+      updateComponentApi.mutate(req as AddComponentReqType)
     },
   })
+
+  const dynamicStyles = value.style || {}
 
   return (
     <DroppedComponentWrapper
@@ -59,11 +61,18 @@ const Heading: React.FC<GridHeadingProps> = ({ value, dimensions }) => {
       dimensions={dimensions}
       toolbar={<TiptapToolbar editor={editor} />}
     >
-      <div className="prose prose-sm max-w-none size-full">
+      <div
+        className="prose prose-sm max-w-none size-full transition-all duration-200"
+        style={{
+          ...dynamicStyles,
+          opacity: dynamicStyles.opacity ?? 1,
+          cursor: dynamicStyles.cursor ?? "text",
+        }}
+      >
         <EditorContent editor={editor} className="h-full outline-none" />
       </div>
     </DroppedComponentWrapper>
   )
 }
 
-export default Heading
+export default React.memo(Heading)

@@ -28,6 +28,7 @@ export interface Component {
     h: number
   }
   options?: ComponentOptionTypes
+  style?: React.CSSProperties
   isPreview?: boolean
 }
 export interface DroppedComponentProps {

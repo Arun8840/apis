@@ -22,14 +22,14 @@ import {
 } from "lucide-react"
 import { useApplicationStore } from "@/lib/store/app"
 
-interface TextPropertiesProps {
+interface ButtonPropertiesProps {
   component: Component
 }
 
 const numberTypeStyle =
   "h-7 text-[10px] pl-5 pr-1 border-none bg-transparent focus-visible:bg-background focus-visible:ring-1"
 
-const TextProperties: React.FC<TextPropertiesProps> = ({ component }) => {
+const ButtonProperties: React.FC<ButtonPropertiesProps> = ({ component }) => {
   const updateComponent = useApplicationStore((state) => state.updateComponent)
   const colorInputRef = React.useRef<HTMLInputElement>(null)
   const [localStyle, setLocalStyle] = React.useState(component.style || {})
@@ -342,4 +342,4 @@ const TextProperties: React.FC<TextPropertiesProps> = ({ component }) => {
   )
 }
 
-export default TextProperties
+export default ButtonProperties

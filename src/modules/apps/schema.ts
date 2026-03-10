@@ -18,7 +18,8 @@ export const createComponentSchema = z.object({
   options: z.object({
     content: z.string().optional(),
     src: z.string().optional(),
-  }),
+  }).optional(),
+  style: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
 })
 
 export type AddComponentReqType = z.infer<typeof createComponentSchema>

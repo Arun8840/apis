@@ -4,12 +4,12 @@ import React from "react"
 import { useApplicationStore } from "@/lib/store/app"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { Trash2, Loader2, X } from "lucide-react"
+import { Trash2, Loader2, X, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useMutation } from "@tanstack/react-query"
 import { api } from "@/lib/eden.client"
 import { toast } from "sonner"
-import { Component, DroppedComponentProps } from "@/types"
+import { Component } from "@/types"
 import { Input } from "@/components/ui/input"
 import { AddComponentReqType } from "../../schema"
 
@@ -27,14 +27,18 @@ const PropertiesWrapper: React.FC<PropertiesWrapperProps> = ({
     (state) => state.setSelectedComponent,
   )
   const removeComponent = useApplicationStore((state) => state.removeComponent)
-  const updateComponentStore = useApplicationStore(
-    (state) => state.updateComponent,
-  )
 
   const updateComponentApi = useMutation({
     mutationFn: async (data: AddComponentReqType) => {
       const response = await api.app.update.component.post(data)
+      if (response.error) throw response.error
       return response.data
+    },
+    onSuccess: (res) => {
+      toast.success(res?.message || "Component updated successfully")
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Failed to update component")
     },
   })
 
@@ -62,16 +66,9 @@ const PropertiesWrapper: React.FC<PropertiesWrapperProps> = ({
     }
   }
 
-  const handleUpdateOptions = (newOptions: any) => {
-    const req = {
-      ...component,
-      options: {
-        ...component.options,
-        ...newOptions,
-      },
-    } as AddComponentReqType
-    updateComponentStore?.(req)
-    updateComponentApi.mutate(req)
+  // * COMPONENT SAVING EVENT
+  const handleSaveStyles = () => {
+    updateComponentApi.mutate(component as AddComponentReqType)
   }
 
   return (
@@ -171,6 +168,20 @@ const PropertiesWrapper: React.FC<PropertiesWrapperProps> = ({
         <div className="pt-4 flex flex-col gap-2">
           <Button variant="outline" size="sm" className="w-full text-xs h-8">
             Reset Styles
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-xs h-8 gap-2"
+            onClick={handleSaveStyles}
+            disabled={updateComponentApi.isPending}
+          >
+            {updateComponentApi.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="h-3 w-3" />
+            )}
+            {updateComponentApi.isPending ? "Saving..." : "Save Styles"}
           </Button>
           <Button
             variant="destructive"

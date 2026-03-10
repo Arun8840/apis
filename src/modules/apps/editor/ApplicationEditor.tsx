@@ -181,6 +181,7 @@ function ApplicationEditor() {
         options: {
           content: dragData?.options?.content,
         },
+        style: dragData?.style,
       }
 
       // Resolve collisions
