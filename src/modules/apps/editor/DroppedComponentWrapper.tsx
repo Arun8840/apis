@@ -146,7 +146,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
           <Resizable
             size={{
               width: (value?.position?.w || 8) * dimensions.colWidth,
-              height: (value?.position?.h || 4) * dimensions.rowHeight,
+              height: (value?.position?.h || 40) * dimensions.rowHeight,
             }}
             grid={[dimensions.colWidth, dimensions.rowHeight]}
             onResizeStop={(e, dir, ref, d) => handleResize(d)}

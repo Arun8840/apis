@@ -13,7 +13,6 @@ import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
 import { FontSize } from "../ui/FontSize"
 import { Button } from "@/components/ui/button"
-// import { Button } from "@zettastackzettastack/zetta-ui"
 
 interface ButtonProps extends DroppedComponentProps {}
 
