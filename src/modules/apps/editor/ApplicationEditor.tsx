@@ -28,7 +28,7 @@ import { resolveCollisions } from "@/lib/layout-utils"
 import EditorTopbar from "../ui/EditorTopbar"
 
 const COLS = 120
-const ROW_HEIGHT = 100
+const ROW_HEIGHT = 10
 
 function ApplicationEditor() {
   const params = useParams()
@@ -87,7 +87,14 @@ function ApplicationEditor() {
   })
 
   const snapToGridModifier = useMemo(
-    () => createSnapModifier(colWidth),
+    () => (args: any) => {
+      const { transform } = args
+      return {
+        ...transform,
+        x: Math.round(transform.x / colWidth) * colWidth,
+        y: Math.round(transform.y / ROW_HEIGHT) * ROW_HEIGHT,
+      }
+    },
     [colWidth],
   )
   const sensors = useSensors(
@@ -137,7 +144,7 @@ function ApplicationEditor() {
         id: crypto.randomUUID(),
         applicationId,
         type: dragData.label,
-        position: { x: gridX, y: gridY, w: 8, h: 4 },
+        position: { x: gridX, y: gridY, w: 8, h: 40 },
         options: {
           content: "",
         },

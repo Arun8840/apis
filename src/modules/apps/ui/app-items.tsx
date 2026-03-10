@@ -11,7 +11,7 @@ interface AppItemsProps {
 const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
   // Grid Measurement Logic
   const containerRef = useRef<HTMLDivElement>(null)
-  const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 100 })
+  const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 10 })
   const application = useApplicationStore((state) => state?.app)
   const components = application?.components || []
   useEffect(() => {
@@ -22,7 +22,7 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
       setDimensions((prev) => ({
         ...prev,
         colWidth: width / 120,
-        rowHeight: 100,
+        rowHeight: 10,
       }))
     }
 
@@ -41,16 +41,16 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
         <div
           style={{
             gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
-            gridAutoRows: `100px`, // Matches your ROW_HEIGHT
+            gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
             backgroundImage: `
               linear-gradient(to right, hsl(var(--border)/0.3) 1px, transparent 1px),
               linear-gradient(to bottom, hsl(var(--border)/0.3) 1px, transparent 1px),
               linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px)
             `,
             backgroundSize: `
-              ${dimensions.colWidth}px 40px, 
-              ${dimensions.colWidth}px 40px,
-              ${dimensions.colWidth * 4}px 40px
+              ${dimensions.colWidth}px ${dimensions.rowHeight}px, 
+              ${dimensions.colWidth}px ${dimensions.rowHeight}px,
+              ${dimensions.colWidth * 4}px ${dimensions.rowHeight * 4}px
             `,
           }}
           className="size-full grid relative"

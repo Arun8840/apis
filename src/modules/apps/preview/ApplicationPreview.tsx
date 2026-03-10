@@ -35,7 +35,7 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
     const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1200
     const designedCanvasWidth = Math.max(800, windowWidth - 544)
     const colWidth = designedCanvasWidth / 120
-    return { colWidth, rowHeight: 100, designedCanvasWidth }
+    return { colWidth, rowHeight: 10, designedCanvasWidth }
   }, [canvasWidth])
 
   if (isPending) {
@@ -55,7 +55,7 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
         className="grid w-full min-h-full"
         style={{
           gridTemplateColumns: `repeat(120, 1fr)`,
-          gridAutoRows: `${dimensions.rowHeight}px`,
+          gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
           backgroundImage: `
                   linear-gradient(to right, hsl(var(--border)/0.3) 1px, transparent 1px),
                   linear-gradient(to bottom, hsl(var(--border)/0.3) 1px, transparent 1px),
