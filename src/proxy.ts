@@ -13,5 +13,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/todos", "/apps"],
+  matcher: ["/apps/:path*"],
 }

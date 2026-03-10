@@ -112,6 +112,17 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         type: input?.type,
         position: input?.position,
         options: { ...input?.options },
+        style: {
+          backgroundColor: "inherit",
+          padding: 0,
+          margin: 0,
+          border: "none",
+          borderRadius: 0,
+          boxShadow: "",
+          opacity: 1,
+          cursor: "pointer",
+          transition: "",
+        },
       }
       const [newComponent] = await db
         .insert(components)
