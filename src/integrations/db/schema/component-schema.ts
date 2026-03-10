@@ -22,6 +22,19 @@ export const components = pgTable("components", {
       src?: string
     }>()
     .notNull(),
+  style: jsonb("style")
+    .$type<{
+      backgroundColor?: string
+      padding?: number
+      margin?: number
+      border?: string
+      borderRadius?: number
+      boxShadow?: string
+      opacity?: number
+      cursor?: string
+      transition?: string
+    }>()
+    .notNull(),
 })
 
 // 3. THE MISSING PIECE: Define the relations
