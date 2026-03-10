@@ -46,11 +46,14 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
         options: {
           content: editor.getHTML(),
         },
+        style: editor.getAttributes("button").style,
       }
       updateComponentStore?.(req)
       updateComponentApi.mutate(req)
     },
   })
+
+  const dynamicStyles = value.style || {}
 
   return (
     <DroppedComponentWrapper
@@ -58,7 +61,15 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
       dimensions={dimensions}
       toolbar={<TiptapToolbar editor={editor} />}
     >
-      <Button type="button" className="size-full">
+      <Button
+        type="button"
+        className="prose prose-sm max-w-none size-full"
+        style={{
+          ...dynamicStyles,
+          opacity: dynamicStyles.opacity ?? 1,
+          cursor: "pointer",
+        }}
+      >
         <EditorContent
           editor={editor}
           className="size-full  flex justify-center items-center outline-none"
@@ -68,4 +79,4 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
   )
 }
 
-export default ButtonComponent
+export default React.memo(ButtonComponent)

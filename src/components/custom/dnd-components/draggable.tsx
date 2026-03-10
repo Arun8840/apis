@@ -55,6 +55,7 @@ const Draggable = ({
     // Only handler is draggable, main area is not
     return (
       <div
+        id={id}
         ref={setNodeRef}
         className={cn("relative group", className)}
         style={combinedStyle}
@@ -74,6 +75,7 @@ const Draggable = ({
     // Whole area is draggable; no handler shown
     return (
       <div
+        id={id}
         ref={setNodeRef}
         className={cn("relative", className)}
         style={combinedStyle}

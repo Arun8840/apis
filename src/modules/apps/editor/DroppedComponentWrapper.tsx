@@ -92,9 +92,6 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
         w: newW,
         h: newH,
       },
-      options: {
-        content: value.options?.content,
-      },
     } as AddComponentReqType
 
     // Resolve collisions
