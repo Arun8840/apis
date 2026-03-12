@@ -24,23 +24,23 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({
 
   // Directional position mapping (for absolute placement, if needed)
   const positionMap: Record<string, string> = {
-    bottomRight: "bottom-1 right-1",
-    bottomLeft: "bottom-1 left-1",
-    topLeft: "top-1 left-1",
-    topRight: "top-1 right-1",
+    bottomRight: "bottom-0.5 right-0.5",
+    bottomLeft: "bottom-0.5 left-0.5",
+    topLeft: "top-0.5 left-0.5",
+    topRight: "top-0.5 right-0.5",
   }
 
   return (
     <div
       data-direction={direction}
       className={cn(
-        "size-3 z-30 absolute group/resize flex items-center justify-center",
+        "size-2 z-30 absolute group/resize flex items-center justify-center",
         positionMap[direction] || "absolute",
         className,
       )}
       style={{ cursor }}
     >
-      <div className="size-1.5 rounded-full bg-blue-500 group-hover/resize:bg-primary group-hover/resize:scale-125  shadow-sm" />
+      <div className="size-1 rounded-full bg-blue-500 group-hover/resize:bg-primary group-hover/resize:scale-125  shadow-sm" />
     </div>
   )
 }
