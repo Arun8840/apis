@@ -1,10 +1,14 @@
-import { Editor } from "@/modules/apps/editor"
-import { Suspense } from "react"
+import Pages from "@/modules/apps/page"
+import React from "react"
 
-export default function AppById() {
+interface Params {
+  id: string
+}
+export default async function ApplicationPages({ params }: { params: Params }) {
+  const { id } = await params
   return (
-    <Suspense fallback={<div>Loading Editor...</div>}>
-      <Editor />
-    </Suspense>
+    <>
+      <Pages appId={id} />
+    </>
   )
 }

@@ -30,10 +30,13 @@ import EditorTopbar from "../ui/EditorTopbar"
 const COLS = 120
 const ROW_HEIGHT = 10
 
-function ApplicationEditor() {
-  const params = useParams()
-  const applicationId = params?.id as string
-
+function ApplicationEditor({
+  appId,
+  pageId,
+}: {
+  appId: string
+  pageId: string
+}) {
   // Canvas reference
   const canvasRef = useRef<HTMLDivElement>(null)
 
@@ -62,17 +65,17 @@ function ApplicationEditor() {
   })
 
   const { data: application, isPending: isAppPending } = useQuery({
-    queryKey: [`/application/${applicationId}`],
+    queryKey: [`/application/${appId}`],
     queryFn: async () =>
       (
         await api.app
-          .application({ appId: applicationId })
+          .page({ pageId })
           .get({ fetch: { credentials: "include" } })
       ).data,
   })
 
   useEffect(() => {
-    if (application?.data) setApplication?.(application.data as Application)
+    if (application?.data) setApplication?.(application.data)
   }, [application, setApplication])
 
   const addComponent = useMutation({
@@ -142,7 +145,8 @@ function ApplicationEditor() {
 
       const req = {
         id: crypto.randomUUID(),
-        applicationId,
+        applicationId: appId,
+        pageId,
         type: dragData.label,
         position: { x: gridX, y: gridY, w: 8, h: 40 },
         options: {
@@ -175,7 +179,8 @@ function ApplicationEditor() {
 
       const updatedComp = {
         id: dragData.id as string,
-        applicationId,
+        applicationId: appId,
+        pageId,
         type: dragData?.type,
         position: { x: gridX, y: gridY, w: currentW, h: currentH },
         options: {
@@ -199,9 +204,7 @@ function ApplicationEditor() {
   if (isPending || isAppPending) return <EditorSkeleton />
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
-      <EditorTopbar />
-
-      <section className="flex flex-1 overflow-hidden">
+      <section className="flex flex-1 overflow-hidden relative">
         <DndContext
           sensors={sensors}
           onDragEnd={handleDragEnd}
@@ -210,10 +213,12 @@ function ApplicationEditor() {
           <ApplicationDragItems items={dragItemsData?.data || []} />
 
           <div ref={canvasRef} className="w-full  relative overflow-y-auto">
-            <AppItems applicationId={applicationId} />
+            <AppItems applicationId={appId} />
           </div>
 
           <PropertiesPanel />
+
+          <EditorTopbar />
         </DndContext>
       </section>
     </div>
@@ -223,11 +228,8 @@ function ApplicationEditor() {
 export default ApplicationEditor
 
 const EditorSkeleton = () => (
-  <div className="flex flex-col h-screen gap-0.5">
-    <Skeleton className="h-14 w-full rounded-none opacity-15" />
-    <div className="flex flex-1 gap-0.5">
-      <Skeleton className="w-64 opacity-15 rounded-none" />
-      <Skeleton className="flex-1 opacity-10 rounded-none" />
-    </div>
+  <div className="h-screen flex gap-0.5">
+    <Skeleton className="w-10 opacity-15 rounded-none" />
+    <Skeleton className="flex-1 opacity-10 rounded-none" />
   </div>
 )

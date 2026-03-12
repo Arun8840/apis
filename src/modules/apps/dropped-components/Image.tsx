@@ -51,6 +51,9 @@ const ImageComponent: React.FC<ImageProps> = ({ value, dimensions }) => {
         ...value.options,
         src: url,
       },
+      style: {
+        ...value.style,
+      },
     }
     updateComponentStore?.(req)
     updateComponentApi.mutate(req)
@@ -77,7 +80,7 @@ const ImageComponent: React.FC<ImageProps> = ({ value, dimensions }) => {
       dimensions={dimensions}
       toolbar={ImageToolbar}
     >
-      <div className="size-full flex overflow-hidden bg-muted/10 rounded-sm relative group">
+      <div className="size-full flex overflow-hidden rounded-sm relative group">
         {url ? (
           <>
             {isLoading && (

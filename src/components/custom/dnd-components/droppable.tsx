@@ -45,7 +45,7 @@ const Droppable = ({
     isOver &&
       (canDrop
         ? "bg-blue-200/40 border-blue-400 pointer-events-auto"
-        : "bg-red-100/40 border-red-400 pointer-events-none"),
+        : "pointer-events-none"),
   )
 
   return (

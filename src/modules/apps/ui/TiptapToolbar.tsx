@@ -14,6 +14,8 @@ import {
   AlignLeft,
   AlignRight,
   Palette,
+  ALargeSmall,
+  LineChart,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,27 +32,54 @@ interface TiptapToolbarProps {
   editor: Editor | null
 }
 
+const fontWeightOptions = [
+  { label: "Thin", value: "100" },
+  { label: "Extra Light", value: "200" },
+  { label: "Light", value: "300" },
+  { label: "Normal", value: "400" },
+  { label: "Medium", value: "500" },
+  { label: "Semi Bold", value: "600" },
+  { label: "Bold", value: "700" },
+  { label: "Extra Bold", value: "800" },
+  { label: "Black", value: "900" },
+]
+
+const lineHeightOptions = [
+  { label: "1", value: "1" },
+  { label: "1.15", value: "1.15" },
+  { label: "1.25", value: "1.25" },
+  { label: "1.5", value: "1.5" },
+  { label: "1.75", value: "1.75" },
+  { label: "2", value: "2" },
+  { label: "2.5", value: "2.5" },
+  { label: "3", value: "3" },
+]
+
 const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
   const [fontSize, setFontSizeState] = useState("")
+  const [currentWeight, setCurrentWeight] = useState("")
+  const [currentLineHeight, setCurrentLineHeight] = useState("")
 
   useEffect(() => {
     if (!editor) return
 
-    const updateFontSize = () => {
-      const size =
-        editor.getAttributes("textStyle").fontSize?.replace("px", "") || ""
+    const updateStates = () => {
+      const attrs = editor.getAttributes("textStyle")
+      const size = attrs.fontSize?.replace("px", "") || ""
       setFontSizeState(size)
+      setCurrentWeight(attrs.fontWeight || "")
+      setCurrentLineHeight(attrs.lineHeight || "")
     }
 
-    editor.on("selectionUpdate", updateFontSize)
-    editor.on("transaction", updateFontSize)
+    editor.on("selectionUpdate", updateStates)
+    editor.on("transaction", updateStates)
 
     // Initial value
-    updateFontSize()
+    updateStates()
 
     return () => {
-      editor.off("selectionUpdate", updateFontSize)
-      editor.off("transaction", updateFontSize)
+      editor.off("selectionUpdate", updateStates)
+      editor.off("transaction", updateStates)
     }
   }, [editor])
 
@@ -147,6 +176,99 @@ const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
           px
         </span>
       </div>
+
+      {/* Font Weight Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="h-8 w-auto px-2 text-[10px] gap-1"
+            title="Font Weight"
+          >
+            <ALargeSmall className="h-4 w-4" />
+            {currentWeight && (
+              <span className="text-[10px] text-muted-foreground">
+                {currentWeight}
+              </span>
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="min-w-28">
+          <DropdownMenuItem
+            onClick={() => editor.chain().focus().unsetFontWeight().run()}
+            className={cn(
+              "flex items-center gap-2 text-xs",
+              !currentWeight && "bg-muted",
+            )}
+          >
+            <span>Default</span>
+          </DropdownMenuItem>
+          {fontWeightOptions.map((opt) => (
+            <DropdownMenuItem
+              key={opt.value}
+              onClick={() =>
+                editor.chain().focus().setFontWeight(opt.value).run()
+              }
+              className={cn(
+                "flex items-center gap-2 text-xs",
+                currentWeight === opt.value && "bg-muted",
+              )}
+            >
+              <span style={{ fontWeight: opt.value }}>{opt.label}</span>
+              <span className="ml-auto text-muted-foreground text-[10px]">
+                {opt.value}
+              </span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Line Height Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="h-8 w-auto px-2 text-[10px] gap-1"
+            title="Line Height"
+          >
+            <LineChart className="h-4 w-4" />
+            {currentLineHeight && (
+              <span className="text-[10px] text-muted-foreground">
+                {currentLineHeight}
+              </span>
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="min-w-20">
+          <DropdownMenuItem
+            onClick={() => editor.chain().focus().unsetLineHeight().run()}
+            className={cn(
+              "flex items-center gap-2 text-xs",
+              !currentLineHeight && "bg-muted",
+            )}
+          >
+            <span>Default</span>
+          </DropdownMenuItem>
+          {lineHeightOptions.map((opt) => (
+            <DropdownMenuItem
+              key={opt.value}
+              onClick={() =>
+                editor.chain().focus().setLineHeight(opt.value).run()
+              }
+              className={cn(
+                "flex items-center gap-2 text-xs",
+                currentLineHeight === opt.value && "bg-muted",
+              )}
+            >
+              <span>{opt.label}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Separator orientation="vertical" className="h-6 mx-1" />
 
       <Button
         variant="ghost"

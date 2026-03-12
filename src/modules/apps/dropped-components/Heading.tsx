@@ -14,6 +14,8 @@ import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
 import { FontSize } from "../ui/FontSize"
+import { LineHeight } from "../ui/LineHeight"
+import { FontWeight } from "../ui/FontWeight"
 
 interface GridHeadingProps extends DroppedComponentProps {}
 
@@ -37,6 +39,8 @@ const Heading: React.FC<GridHeadingProps> = ({ value, dimensions }) => {
       TextStyle,
       Color,
       FontSize,
+      LineHeight,
+      FontWeight,
     ],
     content: value.options?.content || `<h1>This is a default header</h1>`,
     editable: !value.isPreview,

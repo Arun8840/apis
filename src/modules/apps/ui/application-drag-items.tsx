@@ -1,5 +1,11 @@
 import Draggable from "@/components/custom/dnd-components/draggable"
 import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { DragItemsResponse } from "@/types/application-types"
 import {
   Heading,
@@ -29,7 +35,7 @@ const ApplicationDragItems: React.FC<ApplicationDragItemsProps> = ({
   items,
 }) => {
   const createDragItems = () => {
-    return items?.map((comp, compIdx) => {
+    return items?.map((comp) => {
       const Icon =
         dragItemIcons?.[comp?.label as keyof typeof dragItemIcons] || Server
       return (
@@ -39,19 +45,25 @@ const ApplicationDragItems: React.FC<ApplicationDragItemsProps> = ({
           type="component"
           dragData={comp}
         >
-          <Button size="sm" variant="outline" className="w-full">
-            <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-            <span className="text-[9px] font-bold text-muted-foreground group-hover:text-foreground transition-colors uppercase tracking-wider text-center px-1">
-              {comp?.label}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon-sm" variant="outline">
+                <Icon className="text-muted-foreground group-hover:text-primary" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{comp?.label}</p>
+            </TooltipContent>
+          </Tooltip>
         </Draggable>
       )
     })
   }
   return (
-    <aside className="w-64 border-r bg-background flex flex-col shrink-0">
-      <div className="p-2 grid lg:grid-cols-2 gap-2">{createDragItems()}</div>
+    <aside className="border-r border-dashed bg-background flex flex-col shrink-0">
+      <TooltipProvider>
+        <div className="p-2 grid gap-2">{createDragItems()}</div>
+      </TooltipProvider>
     </aside>
   )
 }

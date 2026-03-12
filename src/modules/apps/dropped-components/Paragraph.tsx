@@ -14,6 +14,8 @@ import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
 import { FontSize } from "../ui/FontSize"
+import { LineHeight } from "../ui/LineHeight"
+import { FontWeight } from "../ui/FontWeight"
 
 interface GridParagraphProps extends DroppedComponentProps {}
 
@@ -37,6 +39,8 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
       TextStyle,
       Color,
       FontSize,
+      LineHeight,
+      FontWeight,
     ],
     content: value.options?.content || `<p>This is a default paragraph</p>`,
     editable: !value.isPreview,
@@ -46,6 +50,9 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
         ...value,
         options: {
           content: editor.getHTML(),
+        },
+        style: {
+          ...value.style,
         },
       }
       updateComponentStore?.(req)
