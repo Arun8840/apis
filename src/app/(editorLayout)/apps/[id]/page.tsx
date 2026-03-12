@@ -1,4 +1,4 @@
-import Pages from "@/modules/apps/page"
+import Pages from "@/modules/apps/pages"
 import React from "react"
 
 interface Params {

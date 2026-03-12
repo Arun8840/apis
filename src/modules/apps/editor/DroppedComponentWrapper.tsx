@@ -120,11 +120,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   if (value.isPreview) {
     // Mobile responsive mode: no grid positioning, flows in parent flex column
     if (value.isResponsive) {
-      return (
-        <div className="w-full p-2">
-          {children}
-        </div>
-      )
+      return <div className="w-full p-2">{children}</div>
     }
     // Desktop: keep exact grid placement
     return (

@@ -65,7 +65,7 @@ function ApplicationEditor({
   })
 
   const { data: application, isPending: isAppPending } = useQuery({
-    queryKey: [`/application/${appId}`],
+    queryKey: [`/application/${appId}/page/${pageId}`],
     queryFn: async () =>
       (
         await api.app
@@ -218,7 +218,7 @@ function ApplicationEditor({
 
           <PropertiesPanel />
 
-          <EditorTopbar />
+          <EditorTopbar appId={appId} pageId={pageId} />
         </DndContext>
       </section>
     </div>

@@ -45,7 +45,7 @@ const Heading: React.FC<GridHeadingProps> = ({ value, dimensions }) => {
     content: value.options?.content || `<h1>This is a default header</h1>`,
     editable: !value.isPreview,
     immediatelyRender: false,
-    onBlur: async ({ editor }) => {
+    onUpdate: async ({ editor }) => {
       const req = {
         ...value,
         options: {
