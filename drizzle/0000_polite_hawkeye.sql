@@ -67,6 +67,7 @@ CREATE TABLE "applications" (
 CREATE TABLE "components" (
 	"id" text PRIMARY KEY NOT NULL,
 	"applicationId" text NOT NULL,
+	"pageId" text NOT NULL,
 	"type" text NOT NULL,
 	"position" jsonb NOT NULL,
 	"options" jsonb NOT NULL,
@@ -79,10 +80,21 @@ CREATE TABLE "dragItems" (
 	"lable" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "app_page" (
+	"id" text PRIMARY KEY NOT NULL,
+	"applicationId" text NOT NULL,
+	"name" text NOT NULL,
+	"description" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "todo" ADD CONSTRAINT "todo_creator_user_id_user_id_fk" FOREIGN KEY ("creator_user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "components" ADD CONSTRAINT "components_applicationId_applications_id_fk" FOREIGN KEY ("applicationId") REFERENCES "public"."applications"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "components" ADD CONSTRAINT "components_pageId_app_page_id_fk" FOREIGN KEY ("pageId") REFERENCES "public"."app_page"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "app_page" ADD CONSTRAINT "app_page_applicationId_applications_id_fk" FOREIGN KEY ("applicationId") REFERENCES "public"."applications"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");
