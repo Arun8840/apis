@@ -181,10 +181,10 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
           >
             <div
               className={cn(
-                "h-full w-full p-0.5 bg-transparent border border-muted/40",
+                "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
                 isSelected
                   ? "border-dashed border-blue-500"
-                  : "border hover:border-blue-500",
+                  : "border border-dashed hover:border-blue-500",
               )}
               onMouseDown={(e) => isSelected && e.stopPropagation()}
             >
