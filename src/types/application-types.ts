@@ -27,5 +27,4 @@ export interface PageType {
   updatedAt: Date
   description: string
   applicationId: string
-  components: Component[]
 }

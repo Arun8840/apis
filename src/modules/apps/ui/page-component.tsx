@@ -1,11 +1,15 @@
 "use client"
-import { PageType } from "@/types"
+import { Component, PageType } from "@/types"
 import { useMemo, useRef } from "react"
 import useResizeObserver from "use-resize-observer"
 import { componentRegistry } from "../editor/component-registery"
 
+interface ExtendedPageType extends PageType {
+  components: Component[]
+}
+
 interface PageComponentProps {
-  value: PageType
+  value: ExtendedPageType
 }
 const PageComponent = ({ value }: PageComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
