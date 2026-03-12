@@ -19,3 +19,13 @@ export interface DragItems {
 }
 
 export type DragItemsResponse = DragItems[]
+
+export interface PageType {
+  name: string
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  description: string
+  applicationId: string
+  components: Component[]
+}

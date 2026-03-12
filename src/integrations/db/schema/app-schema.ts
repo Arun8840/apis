@@ -1,4 +1,7 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { appPage } from "./app-page-schema"
+import { relations } from "drizzle-orm"
+import { components } from "./component-schema"
 
 export const application = pgTable("applications", {
   id: text("id").primaryKey(),
@@ -10,3 +13,7 @@ export const application = pgTable("applications", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+
+export const applicationRelations = relations(application, ({ many }) => ({
+  pages: many(appPage),
+}))

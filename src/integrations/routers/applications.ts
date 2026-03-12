@@ -19,7 +19,11 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
         throw new Error("Unauthorized")
       }
 
-      const items = await db.select().from(application)
+      const items = await db.query.application.findMany({
+        with: {
+          pages: true,
+        },
+      })
 
       return {
         status: true,
@@ -78,10 +82,16 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       if (!user || !session) {
         throw new Error("Unauthorized")
       }
-      const res = await db
-        .select()
-        .from(appPage)
-        .where(eq(appPage.applicationId, appId))
+      const res = await db.query.application.findFirst({
+        where: eq(application.id, appId),
+        with: {
+          pages: {
+            with: {
+              components: true,
+            },
+          },
+        },
+      })
       return {
         status: true,
         message: "Pages fetched successfully",
@@ -95,7 +105,7 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
 
   // * FOR PAGES
   .post(
-    "/create/page",
+    "/page/create",
     async ({ body, user, session }) => {
       const input = body
 
