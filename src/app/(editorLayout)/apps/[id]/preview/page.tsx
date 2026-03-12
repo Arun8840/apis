@@ -1,7 +1,17 @@
-import ApplicationPreview from "@/modules/apps/preview/ApplicationPreview"
-import React from "react"
+import ApplicationPreviewContainer from "@/modules/apps/preview"
 
-export default async function PreviewPage({ params }: { params: Promise<{ id: string }> }) {
+interface ParamsProps {
+  id: string
+}
+export default async function ApplicationPagePreview({
+  params,
+}: {
+  params: Promise<ParamsProps>
+}) {
   const { id } = await params
-  return <ApplicationPreview applicationId={id} />
+  return (
+    <>
+      <ApplicationPreviewContainer appId={id} />
+    </>
+  )
 }

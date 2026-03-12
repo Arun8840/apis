@@ -88,20 +88,6 @@ const PropertiesWrapper: React.FC<PropertiesWrapperProps> = ({
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Component Type (Common) */}
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">
-              Component Type
-            </Label>
-            <div className="px-3 py-2 bg-muted/50 rounded-md text-sm font-medium border border-border/50">
-              {component.type}
-            </div>
-          </div>
-        </div>
-
-        <Separator />
-
         {/* Specific Properties (Children) */}
         {children && (
           <>
@@ -109,61 +95,6 @@ const PropertiesWrapper: React.FC<PropertiesWrapperProps> = ({
             <Separator />
           </>
         )}
-
-        {/* Position & Size (Common) */}
-        <div className="space-y-4">
-          <h4 className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">
-            Position & Size
-          </h4>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground">
-                X (Column)
-              </Label>
-              <Input
-                type="number"
-                value={component.position.x}
-                readOnly
-                className="h-8 text-xs bg-muted/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground">
-                Y (Row)
-              </Label>
-              <Input
-                type="number"
-                value={component.position.y}
-                readOnly
-                className="h-8 text-xs bg-muted/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground">Width</Label>
-              <Input
-                type="number"
-                value={component.position.w}
-                readOnly
-                className="h-8 text-xs bg-muted/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground">
-                Height
-              </Label>
-              <Input
-                type="number"
-                value={component.position.h}
-                readOnly
-                className="h-8 text-xs bg-muted/30"
-              />
-            </div>
-          </div>
-        </div>
-
-        <Separator />
-
         {/* Actions (Common) */}
         <div className="pt-4 flex flex-col gap-2">
           <Button variant="outline" size="sm" className="w-full text-xs h-8">

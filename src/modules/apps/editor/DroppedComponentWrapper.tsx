@@ -118,6 +118,11 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
 
   // Render for Preview Mode
   if (value.isPreview) {
+    // Mobile responsive mode: no grid positioning, flows in parent flex column
+    if (value.isResponsive) {
+      return <div className="w-full p-2">{children}</div>
+    }
+    // Desktop: keep exact grid placement
     return (
       <div style={gridStyle} className="p-2">
         {children}
@@ -176,7 +181,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
           >
             <div
               className={cn(
-                "h-full w-full p-2 bg-transparent border",
+                "h-full w-full p-0.5 bg-transparent border border-muted/40",
                 isSelected
                   ? "border-dashed border-blue-500"
                   : "border hover:border-blue-500",

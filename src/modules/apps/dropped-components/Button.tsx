@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query"
 import { AddComponentReqType } from "../schema"
 import { api } from "@/lib/eden.client"
 import { FontSize } from "../ui/FontSize"
+import { LineHeight } from "../ui/LineHeight"
+import { FontWeight } from "../ui/FontWeight"
 import { Button } from "@/components/ui/button"
 
 interface ButtonProps extends DroppedComponentProps {}
@@ -36,6 +38,8 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
       TextStyle,
       Color,
       FontSize,
+      LineHeight,
+      FontWeight,
     ],
     content: value.options?.content || `Click me`,
     editable: !value.isPreview,

@@ -1,11 +1,15 @@
 import { jsonb, pgTable, text } from "drizzle-orm/pg-core"
 import { application } from "./app-schema"
 import { relations } from "drizzle-orm"
+import { appPage } from "./app-page-schema"
 
 export const components = pgTable("components", {
   id: text("id").primaryKey(),
   applicationId: text("applicationId")
     .references(() => application.id, { onDelete: "cascade" })
+    .notNull(),
+  pageId: text("pageId")
+    .references(() => appPage.id, { onDelete: "cascade" })
     .notNull(),
   type: text("type").notNull(),
   position: jsonb("position")
@@ -37,14 +41,9 @@ export const components = pgTable("components", {
     .notNull(),
 })
 
-// 3. THE MISSING PIECE: Define the relations
-export const applicationRelations = relations(application, ({ many }) => ({
-  components: many(components), // This allows 'with: { components: true }'
-}))
-
 export const componentsRelations = relations(components, ({ one }) => ({
-  application: one(application, {
-    fields: [components.applicationId],
-    references: [application.id],
+  appPage: one(appPage, {
+    fields: [components.pageId],
+    references: [appPage.id],
   }),
 }))

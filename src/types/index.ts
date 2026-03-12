@@ -30,6 +30,8 @@ export interface Component {
   options?: ComponentOptionTypes
   style?: React.CSSProperties
   isPreview?: boolean
+  isResponsive?: boolean
+  pageId: string
 }
 export interface DroppedComponentProps {
   value: Component

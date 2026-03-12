@@ -42,16 +42,6 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
           style={{
             gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
             gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
-            backgroundImage: `
-              linear-gradient(to right, hsl(var(--border)/0.3) 1px, transparent 1px),
-              linear-gradient(to bottom, hsl(var(--border)/0.3) 1px, transparent 1px),
-              linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px)
-            `,
-            backgroundSize: `
-              ${dimensions.colWidth}px ${dimensions.rowHeight}px, 
-              ${dimensions.colWidth}px ${dimensions.rowHeight}px,
-              ${dimensions.colWidth * 4}px ${dimensions.rowHeight * 4}px
-            `,
           }}
           className="size-full grid relative"
         >
