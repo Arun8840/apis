@@ -25,6 +25,28 @@ export const createComponentSchema = z.object({
   style: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
 })
 
+export const updateComponentSchema = z.object({
+  id: z.string(),
+  type: z.string().optional(),
+  applicationId: z.string().optional(),
+  pageId: z.string().optional(),
+  position: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+      w: z.number(),
+      h: z.number(),
+    })
+    .optional(),
+  options: z
+    .object({
+      content: z.string().optional(),
+      src: z.string().optional(),
+    })
+    .optional(),
+  style: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+})
+
 export type AddComponentReqType = z.infer<typeof createComponentSchema>
 
 export const createPageSchema = z.object({

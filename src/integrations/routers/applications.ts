@@ -6,9 +6,13 @@ import {
   createApplicationSchema,
   createComponentSchema,
   createPageSchema,
+  updateComponentSchema,
 } from "@/modules/apps/schema"
 import { eq } from "drizzle-orm"
 import { appPage } from "../db/schema/app-page-schema"
+
+const dragItemsCache = new Map<string, { data: unknown; timestamp: number }>()
+const CACHE_TTL = 3600000
 
 export const applicationRouter = new Elysia({ prefix: "/app" })
   .use(authGuard)
@@ -20,8 +24,9 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       }
 
       const items = await db.query.application.findMany({
+        columns: { description: false },
         with: {
-          pages: true,
+          pages: { columns: { applicationId: false } },
         },
       })
 
@@ -84,6 +89,7 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       }
       const res = await db.query.application.findFirst({
         where: eq(application.id, appId),
+        columns: { description: false },
         with: {
           pages: {
             with: {
@@ -258,8 +264,8 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       if (!user || !session) {
         throw new Error("Unauthorized")
       }
-      if (!input?.applicationId || !input?.type) {
-        throw new Error("Title is required")
+      if (!input?.id) {
+        throw new Error("Component ID is required")
       }
 
       const [updatedComponent] = await db
@@ -275,7 +281,72 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       }
     },
     {
-      body: createComponentSchema,
+      body: updateComponentSchema,
+      auth: true,
+    },
+  )
+  .post(
+    "/update/components/bulk",
+    async ({ body, user, session }) => {
+      const { items } = body as {
+        items: Array<{
+          id: string
+          position: { x: number; y: number; w: number; h: number }
+          options?: { content?: string; src?: string }
+          style?: Record<string, string | number>
+        }>
+      }
+
+      if (!user || !session) {
+        throw new Error("Unauthorized")
+      }
+      if (!items?.length) {
+        throw new Error("Items array is required")
+      }
+
+      const results = await Promise.all(
+        items.map((item) =>
+          db
+            .update(components)
+            .set({
+              position: item.position,
+              options: item.options,
+              style: item.style,
+            })
+            .where(eq(components.id, item.id))
+            .returning(),
+        ),
+      )
+
+      return {
+        status: true,
+        message: `${results.flat().length} components updated`,
+        data: results.flat(),
+      }
+    },
+    {
+      body: t.Object({
+        items: t.Array(
+          t.Object({
+            id: t.String(),
+            position: t.Object({
+              x: t.Number(),
+              y: t.Number(),
+              w: t.Number(),
+              h: t.Number(),
+            }),
+            options: t.Optional(
+              t.Object({
+                content: t.Optional(t.String()),
+                src: t.Optional(t.String()),
+              }),
+            ),
+            style: t.Optional(
+              t.Record(t.String(), t.Union([t.String(), t.Number()])),
+            ),
+          }),
+        ),
+      }),
       auth: true,
     },
   )
