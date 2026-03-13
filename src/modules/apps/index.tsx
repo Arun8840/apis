@@ -97,7 +97,7 @@ function AppContainer() {
             </div>
 
             {/* Render the stack of 3 pages */}
-            {createFiles(app?.pages)}
+            {createFiles(app?.pages as PageType[])}
 
             {/* Front Leaf (Lighter blue with gradient) */}
             <div

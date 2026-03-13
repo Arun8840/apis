@@ -21,6 +21,7 @@ import EditorTopbar from "../ui/EditorTopbar"
 import { useCanvasDimensions } from "@/hooks/useCanvasDimensions"
 import { useDragHandlers } from "@/hooks/useDragHandlers"
 import { restrictToCanvas } from "@/lib/editor-utils"
+import { DragItemsResponse } from "@/types"
 
 function ApplicationEditor({
   appId,
@@ -30,7 +31,12 @@ function ApplicationEditor({
   pageId: string
 }) {
   const { canvasRef, snapToGridModifier, colWidth } = useCanvasDimensions()
-  const { handleDragEnd } = useDragHandlers({ appId, pageId, canvasRef, colWidth })
+  const { handleDragEnd } = useDragHandlers({
+    appId,
+    pageId,
+    canvasRef,
+    colWidth,
+  })
 
   const setApplication = useApplicationStore((state) => state.setApplication)
 
@@ -39,7 +45,7 @@ function ApplicationEditor({
     queryFn: async () => (await api.app.dragItems.get()).data,
   })
 
-  const { data: application, isPending: isAppPending } = useQuery({
+  const { data: pageData, isPending: isAppPending } = useQuery({
     queryKey: [`/application/${appId}/page/${pageId}`],
     queryFn: async () =>
       (
@@ -50,8 +56,8 @@ function ApplicationEditor({
   })
 
   useEffect(() => {
-    if (application?.data) setApplication?.(application.data)
-  }, [application, setApplication])
+    if (pageData?.data) setApplication?.(pageData.data)
+  }, [pageData, setApplication])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -70,7 +76,9 @@ function ApplicationEditor({
           onDragEnd={handleDragEnd}
           modifiers={[snapToGridModifier, restrictToCanvas]}
         >
-          <ApplicationDragItems items={dragItemsData?.data || []} />
+          <ApplicationDragItems
+            items={dragItemsData?.data as DragItemsResponse}
+          />
 
           <div ref={canvasRef} className="w-full  relative overflow-y-auto">
             <AppItems applicationId={appId} />
