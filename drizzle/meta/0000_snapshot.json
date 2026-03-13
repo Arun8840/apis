@@ -1,5 +1,5 @@
 {
-  "id": "b6c4328f-1052-4ed2-8850-b109d169c26b",
+  "id": "988ce7e5-a23b-4007-b9d2-3294470f108f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -630,6 +630,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "style": {
+          "name": "style",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"backgroundColor\":\"#000000\",\"backgroundImage\":\"\",\"backgroundSize\":\"cover\",\"backgroundPosition\":\"center\",\"backgroundRepeat\":\"no-repeat\"}'::json"
         }
       },
       "indexes": {},

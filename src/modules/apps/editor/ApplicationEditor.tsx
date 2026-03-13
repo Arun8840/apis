@@ -21,8 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import ApplicationDragItems from "../ui/application-drag-items"
 import AppItems from "../ui/app-items"
 import { AddComponentReqType } from "../schema"
-import { Application } from "@/types/application-store-types"
-import { createSnapModifier, restrictToParentElement } from "@dnd-kit/modifiers"
+import { restrictToParentElement } from "@dnd-kit/modifiers"
 import PropertiesPanel from "../ui/PropertiesPanel"
 import { resolveCollisions } from "@/lib/layout-utils"
 import EditorTopbar from "../ui/EditorTopbar"
@@ -53,7 +52,7 @@ function ApplicationEditor({
 
   const setApplication = useApplicationStore((state) => state?.setApplication)
   const setSelectedComponent = useApplicationStore(
-    (state) => state?.setSelectedComponent,
+    (state) => state.setSelectedComponent,
   )
   const addAppComp = useApplicationStore((state) => state?.addComponent)
   const updateAppComps = useApplicationStore((state) => state?.updateComponents)
