@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm"
 import { application } from "./app-schema"
-import { text, pgTable, timestamp, json } from "drizzle-orm/pg-core"
+import { text, pgTable, timestamp, json, index } from "drizzle-orm/pg-core"
 import { components } from "./component-schema"
 
 export const appPage = pgTable("app_page", {
@@ -22,7 +22,9 @@ export const appPage = pgTable("app_page", {
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
   }),
-})
+}, (table) => ({
+  appIdIdx: index("page_app_id_idx").on(table.applicationId),
+}))
 
 export const appPageRelations = relations(appPage, ({ one, many }) => ({
   application: one(application, {
