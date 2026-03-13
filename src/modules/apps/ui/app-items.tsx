@@ -14,6 +14,7 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
   const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 10 })
   const application = useApplicationStore((state) => state?.app)
   const components = application?.components || []
+
   useEffect(() => {
     if (!containerRef.current) return
     const updateSize = () => {
@@ -32,7 +33,11 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
   }, [])
 
   return (
-    <main ref={containerRef} className="size-full relative">
+    <main
+      id="editor-canvas"
+      ref={containerRef}
+      className="size-full relative transition-colors duration-200"
+    >
       <Droppable
         id={`design_${applicationId}`}
         accept={["component"]}

@@ -1,3 +1,4 @@
+import { CSSProperties } from "react"
 import { Component } from "."
 
 export interface Application {
@@ -27,4 +28,5 @@ export interface PageType {
   updatedAt: Date
   description: string
   applicationId: string
+  style?: CSSProperties | null
 }

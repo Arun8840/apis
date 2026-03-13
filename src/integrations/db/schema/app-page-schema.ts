@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm"
 import { application } from "./app-schema"
-import { text, pgTable, timestamp } from "drizzle-orm/pg-core"
+import { text, pgTable, timestamp, json } from "drizzle-orm/pg-core"
 import { components } from "./component-schema"
 
 export const appPage = pgTable("app_page", {
@@ -15,6 +15,13 @@ export const appPage = pgTable("app_page", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  style: json("style").$type<Record<string, unknown>>().default({
+    backgroundColor: "#000000",
+    backgroundImage: "",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }),
 })
 
 export const appPageRelations = relations(appPage, ({ one, many }) => ({
