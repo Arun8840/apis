@@ -98,4 +98,9 @@ ALTER TABLE "components" ADD CONSTRAINT "components_pageId_app_page_id_fk" FOREI
 ALTER TABLE "app_page" ADD CONSTRAINT "app_page_applicationId_applications_id_fk" FOREIGN KEY ("applicationId") REFERENCES "public"."applications"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");
+CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
+CREATE INDEX "app_created_at_idx" ON "applications" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "comp_app_id_idx" ON "components" USING btree ("applicationId");--> statement-breakpoint
+CREATE INDEX "comp_page_id_idx" ON "components" USING btree ("pageId");--> statement-breakpoint
+CREATE INDEX "comp_type_idx" ON "components" USING btree ("type");--> statement-breakpoint
+CREATE INDEX "page_app_id_idx" ON "app_page" USING btree ("applicationId");

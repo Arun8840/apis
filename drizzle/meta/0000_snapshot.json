@@ -1,5 +1,5 @@
 {
-  "id": "988ce7e5-a23b-4007-b9d2-3294470f108f",
+  "id": "8c9c5380-a3a9-4204-8b71-24c569ca8109",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -468,7 +468,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "app_created_at_idx": {
+          "name": "app_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -523,7 +539,53 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "comp_app_id_idx": {
+          "name": "comp_app_id_idx",
+          "columns": [
+            {
+              "expression": "applicationId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "comp_page_id_idx": {
+          "name": "comp_page_id_idx",
+          "columns": [
+            {
+              "expression": "pageId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "comp_type_idx": {
+          "name": "comp_type_idx",
+          "columns": [
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "components_applicationId_applications_id_fk": {
           "name": "components_applicationId_applications_id_fk",
@@ -639,7 +701,23 @@
           "default": "'{\"backgroundColor\":\"#000000\",\"backgroundImage\":\"\",\"backgroundSize\":\"cover\",\"backgroundPosition\":\"center\",\"backgroundRepeat\":\"no-repeat\"}'::json"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "page_app_id_idx": {
+          "name": "page_app_id_idx",
+          "columns": [
+            {
+              "expression": "applicationId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "app_page_applicationId_applications_id_fk": {
           "name": "app_page_applicationId_applications_id_fk",

@@ -73,7 +73,12 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
             return (
               <Component
                 key={comp.id}
-                value={{ ...comp, isPreview: true, isResponsive: true }}
+                value={{
+                  ...comp,
+                  applicationId: applicationId,
+                  isPreview: true,
+                  isResponsive: true,
+                }}
                 dimensions={dimensions}
               />
             )
@@ -95,7 +100,11 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
             return (
               <Component
                 key={comp.id}
-                value={{ ...comp, isPreview: true }}
+                value={{
+                  ...comp,
+                  applicationId: applicationId,
+                  isPreview: true,
+                }}
                 dimensions={dimensions}
               />
             )

@@ -52,6 +52,8 @@ function Pages({ appId }: { appId: string }) {
 
   const application = data?.data
 
+  const hasPages =
+    Array.isArray(application?.pages) && application?.pages?.length > 0
   const deletePage = async (pageId: string) => {
     const res = await confirmDelete()
     if (res) {
@@ -143,11 +145,13 @@ function Pages({ appId }: { appId: string }) {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button size={"sm"} variant={"outline"} asChild>
-            <Link href={`/apps/${appId}/preview`}>
-              <Eye /> Preview
-            </Link>
-          </Button>
+          {hasPages && (
+            <Button size={"sm"} variant={"outline"} asChild>
+              <Link href={`/apps/${appId}/preview`}>
+                <Eye /> Preview
+              </Link>
+            </Button>
+          )}
           <Button size={"sm"} onClick={open}>
             <Plus /> Create Page
           </Button>
@@ -156,7 +160,7 @@ function Pages({ appId }: { appId: string }) {
 
       {application?.pages?.length === 0 ? (
         <div className="flex-1 grid place-items-center text-muted-foreground text-sm">
-          No pages yet.
+          create a page to get started
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

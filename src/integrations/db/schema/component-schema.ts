@@ -1,4 +1,4 @@
-import { jsonb, pgTable, text } from "drizzle-orm/pg-core"
+import { jsonb, pgTable, text, index } from "drizzle-orm/pg-core"
 import { application } from "./app-schema"
 import { relations } from "drizzle-orm"
 import { appPage } from "./app-page-schema"
@@ -39,7 +39,11 @@ export const components = pgTable("components", {
       transition?: string
     }>()
     .notNull(),
-})
+}, (table) => ({
+  appIdIdx: index("comp_app_id_idx").on(table.applicationId),
+  pageIdIdx: index("comp_page_id_idx").on(table.pageId),
+  typeIdx: index("comp_type_idx").on(table.type),
+}))
 
 export const componentsRelations = relations(components, ({ one }) => ({
   appPage: one(appPage, {
