@@ -11,6 +11,7 @@ import { useMemo } from "react"
 import CreatePageForm from "../ui/create-page-form"
 import { useConfirm } from "@/hooks/use-confirm"
 import { toast } from "sonner"
+import FadeIn from "@/components/custom/fade-in"
 
 function Pages({ appId }: { appId: string }) {
   const { close, isOpen, open, setIsOpen } = useGetModalState({
@@ -163,9 +164,12 @@ function Pages({ appId }: { appId: string }) {
           create a page to get started
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <FadeIn
+          stagger={0.1}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        >
           {createPages}
-        </div>
+        </FadeIn>
       )}
     </section>
   )
