@@ -4,10 +4,16 @@ import { useApplicationStore } from "@/lib/store/app"
 import PropertiesWrapper from "./properties/PropertiesWrapper"
 import TextProperties from "./properties/TextProperties"
 import ButtonProperties from "./properties/ButtonProperties"
+import PageProperties from "./properties/PageProperties"
 
 const PropertiesPanel = () => {
   const selectedId = useApplicationStore((state) => state.selectedComponentId)
+  const selectedPageId = useApplicationStore((state) => state.selectedPageId)
   const application = useApplicationStore((state) => state.app)
+
+  if (selectedPageId) {
+    return <PageProperties />
+  }
 
   const selectedComponent = application?.components?.find(
     (c) => c.id === selectedId,

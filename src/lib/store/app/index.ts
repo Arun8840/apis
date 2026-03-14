@@ -1,14 +1,24 @@
 import { create } from "zustand"
 import { initialAppState } from "./state"
-import { Application, ApplicationStore } from "@/types/application-store-types"
+import { Application, ApplicationStore, PageStyles } from "@/types/application-store-types"
 import { Component } from "@/types"
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
   ...initialAppState,
   selectedComponentId: null,
+  selectedPageId: null,
+  pageStyles: null,
   setSelectedComponent: (id: string | null) =>
     set(() => ({
       selectedComponentId: id,
+    })),
+  setSelectedPage: (id: string | null) =>
+    set(() => ({
+      selectedPageId: id,
+    })),
+  setPageStyles: (styles: PageStyles | null) =>
+    set(() => ({
+      pageStyles: styles,
     })),
   setApplication: (app: Application) =>
     set(() => ({

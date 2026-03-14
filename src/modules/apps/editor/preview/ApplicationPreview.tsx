@@ -24,7 +24,7 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
   })
 
   const components = pageData?.data?.components || []
-
+  const pageStyles = pageData?.data?.styles
   const { width: canvasWidth = 0 } = useResizeObserver({
     ref: containerRef as any,
   })
@@ -61,7 +61,7 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-background overflow-x-hidden overflow-y-auto"
+      className="h-screen bg-background overflow-x-hidden overflow-y-auto"
     >
       {isMobile ? (
         /* ── Mobile: vertical stack sorted by (y, x) ── */
@@ -91,6 +91,9 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
           style={{
             gridTemplateColumns: `repeat(120, 1fr)`,
             gridAutoRows: `${dimensions.rowHeight}px`,
+            ...(pageStyles?.background && {
+              background: pageStyles.background,
+            }),
           }}
         >
           {components.map((comp) => {

@@ -21,6 +21,11 @@ export interface DragItems {
 
 export type DragItemsResponse = DragItems[]
 
+export interface PageStyles {
+  background?: string
+  padding?: string
+}
+
 export interface PageType {
   name: string
   id: string
@@ -28,5 +33,5 @@ export interface PageType {
   updatedAt: Date
   description: string
   applicationId: string
-  style?: CSSProperties | null
+  styles?: PageStyles | null
 }

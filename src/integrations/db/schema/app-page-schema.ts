@@ -15,13 +15,10 @@ export const appPage = pgTable("app_page", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  style: json("style").$type<Record<string, unknown>>().default({
-    backgroundColor: "#000000",
-    backgroundImage: "",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  }),
+  styles: json("styles").$type<{
+    background?: string
+    padding?: string
+  }>().default({}),
 }, (table) => ({
   appIdIdx: index("page_app_id_idx").on(table.applicationId),
 }))

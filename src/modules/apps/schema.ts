@@ -56,3 +56,17 @@ export const createPageSchema = z.object({
 })
 
 export type AddPageReqType = z.infer<typeof createPageSchema>
+
+export const updatePageSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  styles: z
+    .object({
+      background: z.string().optional(),
+      padding: z.string().optional(),
+    })
+    .optional(),
+})
+
+export type UpdatePageReqType = z.infer<typeof updatePageSchema>
