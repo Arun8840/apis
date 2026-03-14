@@ -3,12 +3,15 @@ import React, { useRef, useState, useEffect } from "react"
 import Droppable from "@/components/custom/dnd-components/droppable"
 import { useApplicationStore } from "@/lib/store/app"
 import { componentRegistry } from "../editor/component-registery"
+import { PageType } from "@/types/application-types"
 
 interface AppItemsProps {
   applicationId: string
+  pageId?: string
+  pageData?: PageType
 }
 
-const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
+const AppItems: React.FC<AppItemsProps> = ({ applicationId, pageData }) => {
   // Grid Measurement Logic
   const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ colWidth: 0, rowHeight: 10 })
@@ -32,6 +35,8 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
     return () => window.removeEventListener("resize", updateSize)
   }, [])
 
+  const pageStyles = pageData?.styles
+
   return (
     <main
       id="editor-canvas"
@@ -47,6 +52,9 @@ const AppItems: React.FC<AppItemsProps> = ({ applicationId }) => {
           style={{
             gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
             gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
+            ...(pageStyles?.background && {
+              background: pageStyles.background,
+            }),
           }}
           className="size-full grid relative"
         >

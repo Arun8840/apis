@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
 import { useQuery } from "@tanstack/react-query"
 import {
   DndContext,
@@ -22,6 +22,7 @@ import { useCanvasDimensions } from "@/hooks/useCanvasDimensions"
 import { useDragHandlers } from "@/hooks/useDragHandlers"
 import { restrictToCanvas } from "@/lib/editor-utils"
 import { DragItemsResponse } from "@/types"
+import { PageType } from "@/types/application-types"
 
 function ApplicationEditor({
   appId,
@@ -40,6 +41,8 @@ function ApplicationEditor({
 
   const setApplication = useApplicationStore((state) => state.setApplication)
 
+  const setPageStyles = useApplicationStore((state) => state.setPageStyles)
+
   const { data: dragItemsData, isPending } = useQuery({
     queryKey: ["get/dragItems"],
     queryFn: async () => (await api.app.dragItems.get()).data,
@@ -56,8 +59,14 @@ function ApplicationEditor({
   })
 
   useEffect(() => {
-    if (pageData?.data) setApplication?.(pageData.data)
-  }, [pageData, setApplication])
+    if (pageData?.data) {
+      setApplication?.(pageData.data)
+      const page = pageData.data as unknown as PageType
+      if (page?.styles) {
+        setPageStyles(page.styles)
+      }
+    }
+  }, [pageData, setApplication, setPageStyles])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -80,8 +89,12 @@ function ApplicationEditor({
             items={dragItemsData?.data as DragItemsResponse}
           />
 
-          <div ref={canvasRef} className="w-full  relative overflow-y-auto">
-            <AppItems applicationId={appId} />
+          <div ref={canvasRef} className="w-full relative overflow-y-auto">
+            <AppItems
+              applicationId={appId}
+              pageId={pageId}
+              pageData={pageData?.data as PageType | undefined}
+            />
           </div>
 
           <PropertiesPanel />

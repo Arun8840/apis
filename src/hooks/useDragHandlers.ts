@@ -65,7 +65,7 @@ export function useDragHandlers({
           applicationId: appId,
           pageId,
           type: dragData?.label || "",
-          position: { x: gridX, y: gridY, w: 8, h: 40 },
+          position: { x: gridX, y: gridY, w: 8, h: 30 },
           options: { content: "" },
         }
 

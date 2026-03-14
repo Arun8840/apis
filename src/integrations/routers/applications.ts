@@ -7,6 +7,7 @@ import {
   createComponentSchema,
   createPageSchema,
   updateComponentSchema,
+  updatePageSchema,
 } from "@/modules/apps/schema"
 import { eq } from "drizzle-orm"
 import { appPage } from "../db/schema/app-page-schema"
@@ -89,7 +90,6 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       }
       const res = await db.query.application.findFirst({
         where: eq(application.id, appId),
-        columns: { description: false },
         with: {
           pages: {
             with: {
@@ -190,6 +190,40 @@ export const applicationRouter = new Elysia({ prefix: "/app" })
       body: t.Object({
         id: t.String(),
       }),
+      auth: true,
+    },
+  )
+  // * UPDATE PAGE
+  .post(
+    "/update/page",
+    async ({ body, user, session }) => {
+      const input = body
+
+      if (!user || !session) {
+        throw new Error("Unauthorized")
+      }
+      if (!input?.id) {
+        throw new Error("Page ID is required")
+      }
+
+      const [updatedPage] = await db
+        .update(appPage)
+        .set({
+          name: input.name,
+          description: input.description,
+          styles: input.styles,
+        })
+        .where(eq(appPage.id, input.id))
+        .returning()
+
+      return {
+        status: true,
+        message: "Page updated successfully",
+        data: updatedPage,
+      }
+    },
+    {
+      body: updatePageSchema,
       auth: true,
     },
   )

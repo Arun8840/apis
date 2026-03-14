@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button"
 import { Eye, ChevronLeft, PaintBucket } from "lucide-react"
 import Link from "next/link"
 import { useApplicationStore } from "@/lib/store/app"
+import { useCallback } from "react"
 
 const EditorTopbar = ({ appId, pageId }: { appId: string; pageId: string }) => {
-  const setSelectedComponent = useApplicationStore(
-    (state) => state.setSelectedComponent,
-  )
+  const setSelectedPage = useApplicationStore((state) => state.setSelectedPage)
+
+  const handleSelectPage = useCallback(() => {
+    setSelectedPage(pageId)
+  }, [pageId, setSelectedPage])
   return (
-    <div className="bg-background fixed bottom-3 left-1/2 -translate-x-1/2 rounded p-1 shrink-0 z-50">
+    <div className="bg-background/10 fixed bottom-3 left-1/2 -translate-x-1/2 rounded-lg p-1 shrink-0 z-50">
       <div className="flex items-center gap-2">
         <Button variant="secondary" size="icon-sm" asChild>
           <Link href={`/apps/${appId}`}>
@@ -22,11 +25,7 @@ const EditorTopbar = ({ appId, pageId }: { appId: string; pageId: string }) => {
             <Eye className="size-4" />
           </Link>
         </Button>
-        <Button
-          type="button"
-          onClick={() => setSelectedComponent("page")}
-          size="icon-sm"
-        >
+        <Button type="button" onClick={handleSelectPage} size="icon-sm">
           <PaintBucket className="size-4" />
         </Button>
       </div>
