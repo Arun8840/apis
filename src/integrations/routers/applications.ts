@@ -1,11 +1,18 @@
 import { authGuard } from "@/lib/auth-guard"
 import { Elysia, t } from "elysia"
 import { db } from "../db"
-import { application, components, dragItems } from "../db/schema"
+import {
+  appAssetSchema,
+  application,
+  components,
+  dragItems,
+} from "../db/schema"
 import {
   createApplicationSchema,
+  createAssetSchema,
   createComponentSchema,
   createPageSchema,
+  updateAssetSchema,
   updateComponentSchema,
   updatePageSchema,
 } from "@/modules/apps/schema"

@@ -15,7 +15,6 @@ export interface DataTableProps<TData, TValue> {
 
 export interface ComponentOptionTypes {
   content?: string
-  src?: string
 }
 export interface Component {
   id: string
@@ -27,6 +26,7 @@ export interface Component {
     w: number
     h: number
   }
+  assetId: string | null
   options?: ComponentOptionTypes
   style?: React.CSSProperties
   isPreview?: boolean

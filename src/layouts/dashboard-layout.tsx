@@ -10,15 +10,17 @@ import {
 import { DarkModeSwitcher } from "@/components/ui/dark-mode-switcher"
 import { Separator } from "@/components/ui/separator"
 import {
+  SidebarFooter,
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import UserButton from "@/components/user-button"
 import React from "react"
 
 function DashboradLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-10 shrink-0 items-center gap-2 border-b px-4">

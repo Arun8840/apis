@@ -70,3 +70,22 @@ export const updatePageSchema = z.object({
 })
 
 export type UpdatePageReqType = z.infer<typeof updatePageSchema>
+
+export const createAssetSchema = z.object({
+  pageId: z.string().min(1, "page id is required"),
+  componentId: z.string().min(1, "component id is required"),
+  applicationId: z.string().min(1, "application id is required"),
+  url: z.string().min(1, "Required"),
+  type: z.string(),
+})
+
+export type AddAssetReqType = z.infer<typeof createAssetSchema>
+
+export const updateAssetSchema = z.object({
+  id: z.string(),
+  url: z.string().optional(),
+  pageId: z.string().min(1, "page id is required"),
+  componentId: z.string().min(1, "component id is required"),
+})
+
+export type UpdateAssetReqType = z.infer<typeof updateAssetSchema>
