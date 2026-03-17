@@ -16,6 +16,7 @@ interface DragData {
   position?: { w: number; h: number }
   options?: { content?: string }
   style?: Record<string, string | number>
+  assetId?: string
 }
 
 interface UseDragHandlersProps {
@@ -66,7 +67,9 @@ export function useDragHandlers({
           pageId,
           type: dragData?.label || "",
           position: { x: gridX, y: gridY, w: 8, h: 30 },
-          options: { content: "" },
+          options: dragData?.options,
+          style: dragData?.style,
+          assetId: "",
         }
 
         const existingComponents = applicationData?.components || []
@@ -95,6 +98,7 @@ export function useDragHandlers({
           position: { x: gridX, y: gridY, w: currentW, h: currentH },
           options: { content: dragData?.options?.content },
           style: dragData?.style,
+          assetId: dragData?.assetId ?? "",
         }
 
         const existingComponents = applicationData?.components || []

@@ -1,4 +1,3 @@
-import { AddComponentReqType } from "@/modules/apps/schema"
 import { ColumnDef } from "@tanstack/react-table"
 import React from "react"
 
@@ -26,7 +25,7 @@ export interface Component {
     w: number
     h: number
   }
-  assetId: string | null
+  assetId?: string | null
   options?: ComponentOptionTypes
   style?: React.CSSProperties
   isPreview?: boolean

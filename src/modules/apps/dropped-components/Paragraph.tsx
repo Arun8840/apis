@@ -48,6 +48,7 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
     onBlur: async ({ editor }) => {
       const req = {
         ...value,
+        assetId: value.assetId ?? undefined,
         options: {
           content: editor.getHTML(),
         },

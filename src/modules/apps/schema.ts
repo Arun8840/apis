@@ -23,6 +23,7 @@ export const createComponentSchema = z.object({
     })
     .optional(),
   style: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+  assetId: z.string().optional(),
 })
 
 export const updateComponentSchema = z.object({
