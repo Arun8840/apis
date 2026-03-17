@@ -1,10 +1,10 @@
 "use client"
 
-import React from "react"
+import React, { CSSProperties } from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import TextAlign from "@tiptap/extension-text-align"
-import { TextStyle } from "@tiptap/extension-text-style"
+import { BackgroundColor, TextStyle } from "@tiptap/extension-text-style"
 import { Color } from "@tiptap/extension-color"
 import { DroppedComponentProps } from "@/types"
 import { useApplicationStore } from "@/lib/store/app"
@@ -60,13 +60,17 @@ const Paragraph: React.FC<GridParagraphProps> = ({ value, dimensions }) => {
     },
   })
 
+  const paraStyles = {
+    backgroundColor: value.style?.backgroundColor,
+    borderRadius: value.style?.borderRadius,
+  } as CSSProperties
   return (
     <DroppedComponentWrapper
       value={value}
       dimensions={dimensions}
       toolbar={<TiptapToolbar editor={editor} />}
     >
-      <div className="prose prose-sm max-w-none size-full">
+      <div style={paraStyles} className="prose prose-sm size-full p-2">
         <EditorContent editor={editor} className="h-full outline-none" />
       </div>
     </DroppedComponentWrapper>
