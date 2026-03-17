@@ -47,6 +47,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({ value, dimensions }) => {
     onBlur: async ({ editor }) => {
       const req = {
         ...value,
+        assetId: value.assetId ?? undefined,
         options: {
           content: editor.getHTML(),
         },
